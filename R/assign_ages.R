@@ -1,27 +1,74 @@
-#' Ages function
+#' Assign point ages for each occurrence
 #'
-#' 'ages()' assigns sampled ages to each occurrence within the range on MinAge
-#' to MaxAge. Either using the median, a random age drawn from a uniform 
-#' distribution, or a random age drawn from uniform distribution that is kept 
-#' the same for occurrences which are sampled from the same locality and have 
-#' the same MinAge and MaxAge.
-#' @param dat Occurrence data table
-#' @param method Age assignment method. Either "median", "random" or
-#' "random_by_loc".
-#' @returns Occurrence data table with additional SampledAge column
+#' A function to assign a single point age for each fossil occurrence from
+#' within its age range (between `MinAge` and `MaxAge`). This age can be chosen
+#' using either:
+#' - `median` (default), the median age
+#' - `random`, a random age drawn from a uniform distribution for each
+#'    occurrence
+#' - `random_by_loc`, a random age drawn from a uniform distribution that is
+#'    applied to all occurrences sampled from the same locality which also have
+#'    the same `MinAge` and `MaxAge`.
+#' The supplied `dataframe` of occurrences should not contain any `NA` values.
+#'
+#' @param dat \code{dataframe}. The `dataframe` containing the fossil
+#'    occurrences.
+#' @param method \code{character}. The choice of age assignment method, either
+#'    `median`, `random` or `random_by_loc`.
+#' @returns The input `dataframe` with an additional column providing a
+#'    `SampledAge`.
+#'
+#' @import dplyr
 #' @examples
-#' ages(dat=your_data, method="median")
+#' # Import internal dataset
+#' dat <- tetrapods
+#' # Add column of median ages
+#' example1 <- ages(dat = tetrapods)
+#' # Add column of sampled ages
+#' example2 <- ages(dat = tetrapods, method = "random")
 #' @export
-ages <- function(dat, method){
+ages <- function(dat, method = "median"){
+
+  # Handling errors
+  if (is.data.frame(dat) == FALSE) {
+    stop("`dat` should be a dataframe.")
+  }
+
+  if ("MinAge" %in% colnames(dat) == FALSE ||
+      "MaxAge" %in% colnames(dat) == FALSE) {
+    stop("`MinAge` and/or `MaxAge` columns do not exist in `dat`")
+  }
+
+  if (!is.numeric(dat$MinAge) || !is.numeric(dat$MaxAge)) {
+    stop("`MinAge` and/or `MaxAge` columns are not of numeric class")
+  }
+
+  if (any(is.na(dat$MinAge)) || any(is.na(dat$MaxAge))) {
+    stop(paste("NA values detected in `MinAge` and/or `MaxAge`"))
+  }
+
+  order_check <- dat$MaxAge - dat$MinAge
+  if (any(order_check < 0)) {
+    stop(paste("All `MinAge` values must be smaller than `MaxAge` values"))
+  }
+
+  if (method != "median" && method != "random" && method != "random_by_loc") {
+    stop(paste("`method` must be 'median', 'random' or 'random_by_loc'"))
+  }
+
+  # Compute median values
   if (method == "median") {
     dat <- mutate(rowwise(dat), SampledAge = median(c(MinAge, MaxAge)))
   }
+
+  # Sample random values
   if (method == "random") {
-    SampledAge <- runif(length(dat$Complete_name), min = dat$MinAge, max = dat$MaxAge)
+    SampledAge <- runif(length(dat$MinAge), min = dat$MinAge, max = dat$MaxAge)
     dat <- cbind(dat, SampledAge)
   }
+
+  #Sample random values by locality
   if (method == "random_by_loc") {
-    library(dplyr)
     #dat$SampledAge <- NA
     locate_and_assign <- c()
     for (i in unique(dat$Locality)) {
@@ -30,21 +77,17 @@ ages <- function(dat, method){
       loc_distinct_ages <- loc %>% distinct(MinAge, MaxAge, Locality)
       SampledAge <- c()
       for(j in 1:nrow(loc_distinct_ages)){
-        Age <- runif(n = 1, min = loc_distinct_ages$MinAge[j], max=loc_distinct_ages$MaxAge[j])
+        Age <- runif(n = 1, min = loc_distinct_ages$MinAge[j],
+                     max=loc_distinct_ages$MaxAge[j])
         SampledAge <- append(SampledAge, Age)
       }
       loc_distinct_ages <- cbind(loc_distinct_ages, SampledAge)
       locate_and_assign <- rbind(locate_and_assign, loc_distinct_ages)
     }
-    dat <- left_join(dat, locate_and_assign, by = c("MinAge" = "MinAge", "MaxAge" = "MaxAge", "Locality" = "Locality"))
+    dat <- left_join(dat, locate_and_assign,
+                     by = c("MinAge" = "MinAge",
+                            "MaxAge" = "MaxAge",
+                            "Locality" = "Locality"))
   }
-  for(i in length(dat$SampledAge)){
-    if(dat$SampledAge[i] > dat$MaxAge[i] || dat$SampledAge[i] < dat$MinAge[i]){
-      print("Error: SampledAge greater than max or less than min - check input.")
-    }
-    if(is.na(dat$SampledAge[i])){
-      print("Error: SampledAge failed to update, there are NAs.")
-    }
-  }
-  return(dat)
+  return(data.frame(dat))
 }
