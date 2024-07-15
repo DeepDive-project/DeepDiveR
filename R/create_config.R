@@ -19,6 +19,7 @@
 #' @param empirical_input_file File name where empirical data in the input format for use in deepdive will be saved.
 #' @param output_file File where outputs will be saved.
 #' @returns Creates configuration file with settings to launch DeepDive.
+#' @importFrom ConfigParser #complete
 #' @examples
 #' config <- create_config(wd = paste0(getwd()), bins = time_bins,
 #' sim_name = "test", n_areas = length(unique(your_data$Area)),
