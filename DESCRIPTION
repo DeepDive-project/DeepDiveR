@@ -17,6 +17,7 @@ Depends:
     R (>= 4.4.1)
 LazyData: true
 Imports: 
+    ConfigParser,
     data.table,
     dplyr,
     tidyr
