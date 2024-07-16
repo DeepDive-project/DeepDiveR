@@ -1,31 +1,96 @@
-#' Make input files for DeepDive where replicates are saved in separate files
+#' Make input files for DeepDive
 #'
-#' 'write_dd_files()' uses fossil occurrence data to make input files for use in DeepDive
-#' @param dat Column-wise occurrence data with taxon ID, Area, MinAge, MaxAge,
-#' Locality columns.
-#' @param r The number of age assignment replicates
-#' @param age_m The age assignment method
-#' @param bins The time bins specified for the data set
-#' @returns Saves a csv file for each age replicate with Type column indicating
-#' whether data are locality counts or the binned occurrence data per region.
+#' A function to use fossil occurrence data to make input files for use in
+#' DeepDive.
+#'
+#' @param dat \code{dataframe}. The `dataframe` describing the occurrence data,
+#'    including `Taxon`, `Area`, `MinAge`, `MaxAge` and `Locality` columns.
+#' @param bins \code{dataframe}. A `dataframe` designating the boundaries of
+#'    the time bins used in the analysis.
+#' @param reps \code{integer}. The number of age assignment replicates. Defaults
+#'    to 1.
+#' @param age_m \code{character}. The age assignment method. Default is
+#'    `median`.
+#' @returns A `csv` file is produced for each age replicate. The `Type` column
+#'    indicates whether data are locality counts or the binned occurrence data
+#'    per region.
+#'
 #' @examples
-#' write_dd_files(dat, r=replicate, bins=bins, age_m=age_method)
+#' # Import internal dataset
+#' dat <- tetrapods
+#' # Create DeepDive input file
+#' example1 <- write_dd_files(dat = dat, bins = bins)
+#' # Create DeepDive input files using random age assigment, with five reps
+#' example2 <- write_dd_files(dat = dat, bins = bins, r = 5, age_m = "random")
 #' @export
-write_dd_files <- function(dat, r=replicate, age_m="median", bins){
-  sampled_dat <- ages(dat, method=age_m)  # Get ages and append
-  area_tables <- split(sampled_dat, f = sampled_dat$Area)  # Split data by area
+write_dd_files <- function(dat = NULL, bins = NULL, reps = 1, age_m = "median"){
+
+  # Handling errors
+  if (is.data.frame(dat) == FALSE) {
+    stop("`dat` should be a dataframe.")
+  }
+
+  if (is.data.frame(bins) == FALSE) {
+    stop("`bins` should be a dataframe.")
+  }
+
+  if ("Taxon" %in% colnames(dat) == FALSE ||
+      "Area" %in% colnames(dat) == FALSE ||
+      "MinAge" %in% colnames(dat) == FALSE ||
+      "MaxAge" %in% colnames(dat) == FALSE ||
+      "Locality" %in% colnames(dat) == FALSE) {
+    stop("`dat` does not contain columns `Taxon`, `Area`, `MinAge`, `MaxAge`,
+         and `Locality`")
+  }
+
+  if (!is.numeric(dat$MinAge) || !is.numeric(dat$MaxAge)) {
+    stop("`MinAge` and/or `MaxAge` columns are not of numeric class")
+  }
+
+  if ("stage" %in% colnames(bins) == FALSE ||
+      "start" %in% colnames(bins) == FALSE ||
+      "end" %in% colnames(bins) == FALSE ||
+      "midpoint" %in% colnames(bins) == FALSE) {
+    stop("`bins` does not contain columns `stage`, `start`, `end`, and
+         `midpoint`")
+  }
+
+  if (!is.numeric(bins$start) || !is.numeric(bins$end) ||
+      !is.numeric(bins$midpoint)) {
+    stop("`start` and/or `end` and/or `midpoint` columns are not of numeric
+         class")
+  }
+
+  if (is.numeric(reps) == FALSE) {
+    stop("`reps` should be an integer.")
+  }
+
+  if (method != "median" && method != "random" && method != "random_by_loc") {
+    stop(paste("`method` must be 'median', 'random' or 'random_by_loc'"))
+  }
+
+
+  # Get ages and append
+  sampled_dat <- ages(dat, method = age_m)
+
+  # Split data by area
+  area_tables <- split(sampled_dat, f = sampled_dat$Area)
 
   # Get species or genera level data
-  occs <- taxa_time_per_area(sampled_dat, area_tables, bins=bins)
+  occs <- taxa_time_per_area(sampled_dat, bins = bins)
 
   # Get locality data
-  locs <- generate_locality_dataset(sampled_dat, bins=bins)
+  locs <- generate_locality_dataset(sampled_dat, bins = bins)
 
+  # Collate and save
   deepdive_input <- rbind(locs, occs)
-  write.csv(deepdive_input, paste0(name, "empirical_data/", r, "deepdive_input.csv"), row.names=FALSE)
+  write.csv(deepdive_input,
+            paste0(name, "empirical_data/", reps, "deepdive_input.csv"),
+            row.names = FALSE)
 
-  # generate_occurrence_dataset(sampled_dat, area_tables, bins=bins, res, name)
-  # occs_per_loc <- occs/(locs+1) # Occurrences per locality through time for each area
+  #generate_occurrence_dataset(sampled_dat, area_tables, bins=bins, res, name)
+  # Occurrences per locality through time for each area
+  #occs_per_loc <- occs/(locs+1)
 }
 
 
@@ -87,26 +152,26 @@ write_dd_files2 <- function(dat, r=replicate, age_m="median", bins){
 #' @examples
 #' prep_dd_input(dat=your_data, bins=bins, r=100, age_m = "random_by_loc")
 #' @export
-prep_dd_input <- function(dat=dat, bins, r=replicate, age_m=age_method, 
+prep_dd_input <- function(dat=dat, bins, r=replicate, age_m=age_method,
                           output_file=NULL){
 
   deepdive_input <- data.frame()
   for(rep in 1:r){
-    
+
     sampled_dat <- ages(dat, method=age_m) # Get ages and append
     area_tables <- split(sampled_dat, f = sampled_dat$Area)  # Split data by area
 
     # Get species or genera level data
     occs <- taxa_time_per_area(sampled_dat, area_tables, bins=bins)
     cnames <- c(colnames(occs))
-    
+
     # Get locality data
     locs <- generate_locality_dataset(sampled_dat, bins=bins)
 
     # Get time bin data
     tbins <- data.frame(cbind(c("bin_start", "bin_mid", "bin_dur"), NA,
-                              rbind(bins[-length(bins)], 
-                                    rowMeans(cbind(bins[-length(bins)], bins[-1])), 
+                              rbind(bins[-length(bins)],
+                                    rowMeans(cbind(bins[-length(bins)], bins[-1])),
                                     bins[-length(bins)]-bins[-1])))
     names(tbins) <- cnames
 
