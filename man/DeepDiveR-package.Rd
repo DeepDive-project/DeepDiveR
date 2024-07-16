@@ -4,12 +4,24 @@
 \name{DeepDiveR-package}
 \alias{DeepDiveR}
 \alias{DeepDiveR-package}
-\title{DeepDiveR: Set and launch DeepDive analyses.}
+\title{DeepDiveR: Describe and launch DeepDive analyses.}
 \description{
 Organise input data and scripts for analysis in DeepDive.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item Report bugs at \url{https://github.com/DeepDive-project/DeepDiveR/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Rebecca Cooper \email{rebecca.cooper@unifr.ch} (\href{https://orcid.org/0000-0002-4742-1422}{ORCID})
+
+Authors:
+\itemize{
+  \item Daniele Silvestro \email{daniele.silvestro@unifr.ch} (\href{https://orcid.org/0000-0003-0100-0961}{ORCID})
+}
 
 }
 \keyword{internal}

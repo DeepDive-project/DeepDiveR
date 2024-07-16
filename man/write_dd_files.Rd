@@ -2,27 +2,37 @@
 % Please edit documentation in R/deepdive_input_files.R
 \name{write_dd_files}
 \alias{write_dd_files}
-\title{Make input files for DeepDive where replicates are saved in separate files}
+\title{Make input files for DeepDive}
 \usage{
-write_dd_files(dat, r = replicate, age_m = "median", bins)
+write_dd_files(dat = NULL, bins = NULL, reps = 1, age_m = "median")
 }
 \arguments{
-\item{dat}{Column-wise occurrence data with taxon ID, Area, MinAge, MaxAge,
-Locality columns.}
+\item{dat}{\code{dataframe}. The \code{dataframe} describing the occurrence data,
+including \code{Taxon}, \code{Area}, \code{MinAge}, \code{MaxAge} and \code{Locality} columns.}
 
-\item{r}{The number of age assignment replicates}
+\item{bins}{\code{dataframe}. A \code{dataframe} designating the boundaries of
+the time bins used in the analysis.}
 
-\item{age_m}{The age assignment method}
+\item{reps}{\code{integer}. The number of age assignment replicates. Defaults
+to 1.}
 
-\item{bins}{The time bins specified for the data set}
+\item{age_m}{\code{character}. The age assignment method. Default is
+\code{median}.}
 }
 \value{
-Saves a csv file for each age replicate with Type column indicating
-whether data are locality counts or the binned occurrence data per region.
+A \code{csv} file is produced for each age replicate. The \code{Type} column
+indicates whether data are locality counts or the binned occurrence data
+per region.
 }
 \description{
-'write_dd_files()' uses fossil occurrence data to make input files for use in DeepDive
+A function to use fossil occurrence data to make input files for use in
+DeepDive.
 }
 \examples{
-write_dd_files(dat, r=replicate, bins=bins, age_m=age_method)
+# Import internal dataset
+dat <- tetrapods
+# Create DeepDive input file
+example1 <- write_dd_files(dat = dat, bins = bins)
+# Create DeepDive input files using random age assigment, with five reps
+example2 <- write_dd_files(dat = dat, bins = bins, r = 5, age_m = "random")
 }

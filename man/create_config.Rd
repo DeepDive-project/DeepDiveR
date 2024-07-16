@@ -9,7 +9,7 @@ create_config(
   model_training = TRUE,
   empirical_predictions = TRUE,
   autotune = TRUE,
-  present_diversity = NA,
+  present_diversity = NULL,
   path_wd = NULL,
   bins = NULL,
   sim_name = NULL,
@@ -24,47 +24,63 @@ create_config(
 )
 }
 \arguments{
-\item{simulate}{A TRUE/FALSE statement that switches on and off generation of simulated datasets used in model training and testing.}
+\item{simulate}{\code{logical}. A TRUE/FALSE statement that switches on and
+off generation of simulated datasets used in model training and testing.
+Defaults to TRUE.}
 
-\item{model_training}{A TRUE/FALSE statement that switches on and off the training of new RNN models.}
+\item{model_training}{\code{logical}. A TRUE/FALSE statement that switches on
+and off the training of new RNN models. Defaults to TRUE.}
 
-\item{empirical_predictions}{A TRUE/FALSE statement that switches on and off empirical analyses.}
+\item{empirical_predictions}{\code{logical}. A TRUE/FALSE statement that
+switches on and off empirical analyses. Defaults to TRUE.}
 
-\item{autotune}{When TRUE a new config will be saved with adjusted parameters used for analyses that reflect the empirical data.}
+\item{autotune}{\code{logical}. When TRUE (default), a new config will be
+saved with adjusted parameters used for analyses that reflect the
+empirical data.}
 
-\item{path_wd}{Working directory where files for analyses can be found.}
+\item{present_diversity}{\code{integer}. Number of extant taxa which
+predictions will be conditioned on. When NULL (default), no conditioning
+occurs.}
 
-\item{bins}{A vector of bin boundary ages.}
+\item{path_wd}{\code{character}. Working directory where files for analyses
+can be found.}
 
-\item{sim_name}{A string that identifies a set of simulations.}
+\item{bins}{\code{numeric}. A vector of bin boundary ages.}
 
-\item{n_areas}{An integer number of discrete sampling regions e.g. continents, basins.}
+\item{sim_name}{\code{character}. A string that identifies a set of
+simulations.}
 
-\item{simulations_file}{File where simulations will be saved.}
+\item{n_areas}{\code{integer}. An integer number of discrete sampling regions
+e.g. continents, basins.}
 
-\item{add_test}{A TRUE/FALSE statement, when true a test set with the same settings as the training set are generated.}
+\item{simulations_file}{\code{character}. File where simulations will be
+saved.}
 
-\item{models_file}{File where trained models can be saved and retrieved.}
+\item{add_test}{\code{logical}. A TRUE/FALSE statement, when true a test set
+with the same settings as the training set are generated.}
 
-\item{feature_file}{File name for training features.}
+\item{models_file}{\code{character}. File where trained models can be saved
+and retrieved.}
 
-\item{label_file}{File name for training labels.}
+\item{feature_file}{\code{character}. File name for training features.}
 
-\item{empirical_input_file}{File name where empirical data in the input format for use in deepdive will be saved.}
+\item{label_file}{\code{character}. File name for training labels.}
 
-\item{output_file}{File where outputs will be saved.}
+\item{empirical_input_file}{\code{character}. File name where empirical data
+in the input format for use in DeepDive will be saved.}
 
-\item{present_diverstiy}{Number of extant taxa which predictions will be conditioned on. When NA no conditioning occurs.}
+\item{output_file}{\code{character}. File where outputs will be saved.}
 }
 \value{
 Creates configuration file with settings to launch DeepDive.
 }
 \description{
-'create_config()' generates a config object with settings needed to launch
-DeepDive scripts in python. Uses ConfigParser (Hoefling, 2017) formatting.
+A function to generate a configuration object containing settings needed to
+launch DeepDive scripts in Python. Uses ConfigParser (Hoefling, 2017)
+formatting.
 }
 \examples{
-config <- create_config(wd = paste0(getwd()), bins = time_bins, 
-sim_name = "test", n_areas = length(unique(your_data$Area)), 
+config <- create_config(wd = paste0(getwd()), bins = time_bins,
+sim_name = "test", n_areas = length(unique(your_data$Area)),
 simulations_file = paste0(path_dat, "simulations"), add_test = T)
 }

@@ -2,32 +2,49 @@
 % Please edit documentation in R/time_bins.R
 \name{adjust_stages}
 \alias{adjust_stages}
-\title{Adjust stages time bins}
+\title{Modify time bins}
 \usage{
-adjust_stages(bins, finish, rmv_bins = NULL, quat = F, holo = F, holo_ple = F)
+adjust_stages(
+  bins = NULL,
+  finish = NULL,
+  rmv_bins = NULL,
+  quat = FALSE,
+  holo = FALSE,
+  holo_ple = FALSE
+)
 }
 \arguments{
-\item{bins}{A table of time bin start, end and midpoint ages.}
+\item{bins}{\code{dataframe}. A \code{dataframe} of time bin start, end, and
+midpoint ages.}
 
-\item{finish}{Ending age of the youngest time bin.}
+\item{finish}{\code{numeric}. The age at which the youngest time bin ends.}
 
-\item{rmv_bins}{Named bins will be removed from the bins object.}
+\item{rmv_bins}{\code{character}. The names of time bins to be removed from
+the \code{dataframe}.}
 
-\item{quat}{When TRUE bins in the Quaternary are merged into one time bin.}
+\item{quat}{\code{logical}. When \code{quat = TRUE}, bins in the Quaternary are
+merged into one time bin. Default is \code{FALSE}.}
 
-\item{holo}{When TRUE bins in the Holocene will be merged into one time bin.}
+\item{holo}{\code{logical}. When \code{holo = TRUE}, bins in the Holocene are
+merged into one time bin. Default is \code{FALSE}.}
 
-\item{holo_ple}{When TRUE bins in the Holocene will be merged into one time
-bin along with the Upper Pleistocene.}
+\item{holo_ple}{\code{logical}. When \code{holo_ple = TRUE}, bins in the Holocene
+are merged into one time bin along with the Upper Pleistocene. Default is
+\code{FALSE}.}
 }
 \value{
-A table of start, end and midpoint ages
+A \code{dataframe} containing the start, end, and midpoint ages of the
+generated time bins.
 }
 \description{
-'adjust_stages()' takes a table of time bin start, end and midpoint ages and
-makes adjustments depending on settings provided.
+A function to modify a table of time bin start, end, and midpoint ages,
+depending on any settings provided.
 }
 \examples{
-adjust_stages(bins, finish=192.9 , rmv_bins="Sinemurian")
-adjust_stages(bins, finish=0, quat=T)
+# Remove Sinemurian from a set of Jurassic time bins
+example1 <- build_stages(start = 202, end = 145)
+example1 <- adjust_stages(example1, finish = 145, rmv_bins = "Sinemurian")
+# Merge Quaternary time bin
+example2 <- build_stages()
+example2 <- adjust_stages(example2, finish = 0, quat = TRUE)
 }
