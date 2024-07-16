@@ -4,23 +4,29 @@
 \alias{build_bins}
 \title{Build equal length time bins}
 \usage{
-build_bins(start, end, n = NULL)
+build_bins(start = 100, end = 0, n = 100)
 }
 \arguments{
-\item{start}{Age at which the oldest time bin should start.}
+\item{start}{\code{numeric}. Numerical age at which the oldest time bin
+should start. Default is \code{100}.}
 
-\item{end}{Age at which the youngest time bin should end.}
+\item{end}{\code{numeric}. Numerical age at which the youngest time bin
+should end. Default is \code{0}.}
 
-\item{n}{Number of bins to be made.}
+\item{n}{\code{numeric}. Number of time bins to be made. Default is \code{100}.}
 }
 \value{
-Tibble containing the start, end and midpoint ages of time bins.
+A \code{dataframe} containing the start, end, and midpoint ages of the
+generated time bins.
 }
 \description{
-'build_bins()' makes a table of time bins and is called within the time_bins
-function only in the case where equal_bins are specified by the user.
+A function to create a table of time bins. The function is called within the
+\code{time_bins()} function only in the case where \code{equal_bins} are specified by
+the user. By default, 100 1My bins are generated.
 }
 \examples{
-build_bins(start=100, end=0, n=100)
-build_bins(start=10, end=5, n=20)
+# Generate 100 time bins between 100My and present
+example1 <- build_bins()
+# Generate 20 time bins between 10My and 5My
+example2 <- build_bins(start = 10, end = 5, n = 20)
 }

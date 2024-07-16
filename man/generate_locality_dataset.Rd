@@ -2,26 +2,32 @@
 % Please edit documentation in R/localities.R
 \name{generate_locality_dataset}
 \alias{generate_locality_dataset}
-\title{Locality data set}
+\title{Summarise locality distribution}
 \usage{
-generate_locality_dataset(dat, bins)
+generate_locality_dataset(dat = NULL, bins = NULL)
 }
 \arguments{
-\item{dat}{Data frame of occurrences with taxon ID, Area, MinAge, MaxAge and
-Locality columns.}
+\item{dat}{\code{dataframe}. A \code{dataframe} containing the fossil occurrences,
+including \code{Taxon}, \code{Area}, \code{MinAge}, \code{MaxAge} and \code{Locality} columns.}
 
-\item{bins}{Time bins used in the analysis (should reflect the empirical data
+\item{bins}{\code{dataframe}. A \code{dataframe} designating the boundaries of
+the time bins used in the analysis. These should reflect the empirical data
 and be identical to the bins used in any corresponding DeepDive simulations
-and training).}
+and training.}
 }
 \value{
-A table of dimensions regions x bins where the summed number of
-localities in a time bin are recorded.
+A \code{dataframe} of shape \verb{region x time bin} describing where
+occurrences are recorded.
 }
 \description{
-'generate_locality_dataset()' makes a data frame of the summed number of
-localities per area and time bin (output is a table of regions x bins).
+A function to create a \code{dataframe} of the summed number of localities per
+area and time bin, provided as a table of regions x bins.
 }
 \examples{
-generate_locality_dataset(dat=your_data, bins=time_bins)
+# Import internal dataset
+dat <- tetrapods
+# Set Carboniferous to Triassic time bins
+time_bins <- build_stages(start = 359, end = 200)
+# Summarise distribution of occurrences
+example1 <- generate_locality_dataset(dat = dat, bins = time_bins)
 }

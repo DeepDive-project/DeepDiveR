@@ -2,29 +2,35 @@
 % Please edit documentation in R/occs_per_region_time.R
 \name{generate_occurrence_dataset}
 \alias{generate_occurrence_dataset}
-\title{Occurrences per continent and time bin}
+\title{Summarise occurrences per continent and time bin}
 \usage{
-generate_occurrence_dataset(dat, area_tables, bins)
+generate_occurrence_dataset(dat = NULL, bins = NULL)
 }
 \arguments{
-\item{dat}{Data frame of occurrences with taxon ID, Area, MinAge, MaxAge and
-Locality columns.}
+\item{dat}{\code{dataframe}. A \code{dataframe} containing the fossil occurrences,
+including \code{Taxon}, \code{Area}, \code{MinAge}, \code{MaxAge} and \code{Locality} columns. A
+\code{SampledAge} column must also be generated, such as using \code{ages()}.}
 
-\item{area_tables}{Tibble of occurrence table split by area}
-
-\item{bins}{Time bins used in the analysis (should reflect the empirical data
+\item{bins}{\code{dataframe}. A \code{dataframe} designating the boundaries of
+the time bins used in the analysis. These should reflect the empirical data
 and be identical to the bins used in any corresponding DeepDive simulations
-and training)}
+and training.}
 }
 \value{
-A table of dimensions regions x bins where the number of occurrences
-are summed per region per time bin and recorded.
+A \code{dataframe} of shape \verb{region x time bin} describing where
+occurrences are recorded.
 }
 \description{
-'generate_occurrence_dataset()' sums the number of occurrences per region to
-make a table of regions x bins.
+A function to summarise the number of occurrences per region, provided as a
+table of regions x bins.
 }
 \examples{
-generate_occurrence_dataset(dat=your_data, 
-area_tables=your_data_split_by_area, bins=time_bins)
+#' # Import internal dataset
+dat <- tetrapods
+#' # Assign ages for tetrapods
+dat <- ages(dat = tetrapods)
+# Set Carboniferous to Triassic time bins
+time_bins <- build_stages(start = 359, end = 200)
+# Summarise distribution of occurrences
+example1 <- generate_occurrence_dataset(dat = dat, bins = time_bins)
 }

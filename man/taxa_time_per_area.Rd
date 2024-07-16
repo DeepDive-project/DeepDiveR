@@ -2,29 +2,35 @@
 % Please edit documentation in R/bin_occurrences.R
 \name{taxa_time_per_area}
 \alias{taxa_time_per_area}
-\title{Taxa per time bin per area (occurrence data)}
+\title{Calculate the number of taxa per time bin per area}
 \usage{
-taxa_time_per_area(dat, area_tables, bins)
+taxa_time_per_area(dat = NULL, bins = NULL)
 }
 \arguments{
-\item{dat}{An occurrence data table including taxon id, Area, MinAge, MaxAge
-and Locality columns.}
+\item{dat}{\code{dataframe}. The \code{dataframe} describing the occurrence data,
+including \code{Taxon}, \code{Area}, \code{MinAge}, \code{MaxAge} and \code{Locality} columns. A
+\code{SampledAge} column must also be generated, such as using \code{ages()}.}
 
-\item{area_tables}{Tibble of occurrence table split by area.}
-
-\item{bins}{Time bins used in the analysis (should reflect the empirical data
+\item{bins}{\code{dataframe}. A \code{dataframe} designating the boundaries of
+the time bins used in the analysis. These should reflect the empirical data
 and be identical to the bins used in any corresponding DeepDive simulations
-and training)}
+and training.}
 }
 \value{
-A table of shape taxon x region x time bin where occurrences are
-recorded.
+A \code{dataframe} of shape \verb{taxon x region x time bin} describing where
+occurrences are recorded.
 }
 \description{
-'taxa_time_per_area()' makes a table of shape taxon x region x time bin where
+A function to produce a table of shape \verb{taxon x region x time bin} where
 occurrences are recorded.
 }
 \examples{
-taxa_time_per_area(dat=your_data, 
-area_tables=occurrence_data_split_by_sampling_region, bins=your_bins)
+# Import internal dataset
+dat <- tetrapods
+# Assign ages for tetrapods
+dat <- ages(dat = tetrapods)
+# Set Carboniferous to Triassic time bins
+time_bins <- build_stages(start = 359, end = 200)
+# Calculate number of taxa per time bin and region
+example1 <- taxa_time_per_area(dat = tetrapods, bins = time_bins)
 }

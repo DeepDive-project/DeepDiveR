@@ -4,20 +4,27 @@
 \alias{build_epochs}
 \title{Build time bins using geological epochs}
 \usage{
-build_epochs(begin, finish)
+build_epochs(start = 66, end = 0)
 }
 \arguments{
-\item{start}{Age at which the oldest time bin should start.}
+\item{start}{\code{numeric}. Numerical age at which the oldest time bin
+should start. Default is \code{66}.}
 
-\item{end}{Age at which the youngest time bin should end.}
+\item{end}{\code{numeric}. Numerical age at which the youngest time bin
+should end. Default is \code{0}.}
 }
 \value{
-Table containing the start, end and midpoint ages of time bins.
+A \code{dataframe} containing the start, end, and midpoint ages of the
+generated time bins.
 }
 \description{
-'build_epochs()' makes a table of time bins and is called within the
-time_bins function only in the case where epochs are specified by the user.
+A function to create a table of time bins. The function is called within the
+\code{time_bins()} function only in the case where \code{epochs} are specified by the
+user. By default, Cenozoic epochs are returned.
 }
 \examples{
-build_epochs(start=251.902, end=66)
+# Generate time bins for the Cenozoic
+example1 <- build_stages()
+# Generate time bins for the Mesozoic
+example2 <- build_stages(start = 252, end = 66)
 }

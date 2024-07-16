@@ -2,20 +2,25 @@
 % Please edit documentation in R/time_bins.R
 \name{customise_bins}
 \alias{customise_bins}
-\title{Custom time bins}
+\title{Build time bins using a custom vector}
 \usage{
-customise_bins(custom_bins)
+customise_bins(custom_bins = NULL)
 }
 \arguments{
-\item{custom_bins}{A negative vector of time bin boundary ages}
+\item{custom_bins}{\code{numeric}. A vector of time bin boundary ages.}
 }
 \value{
-A table of start, end and midpoint ages
+A \code{dataframe} containing the start, end, and midpoint ages of the
+generated time bins.
 }
 \description{
-'customise_bins()' takes a vector of time bin boundary ages (assumed to be -)
-and makes a table of start, end and midpoint ages.
+A function to create a table of time bins. The function takes a vector of
+time bin boundary ages (assumed to be millions of years, or years, in the
+past) and makes a table of start, end, and midpoint ages.
 }
 \examples{
-customise_bins(custom_bins = -c(264.26, 224.54, 192.9))
+# Create vector of bin boundary ages
+bin_boundaries <- c(264.26, 224.54, 192.9)
+# Generate time bins
+example1 <- customise_bins(custom_bins = bin_boundaries)
 }
