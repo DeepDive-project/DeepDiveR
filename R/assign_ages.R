@@ -27,7 +27,7 @@
 #' # Add column of sampled ages
 #' example2 <- ages(dat = tetrapods, method = "random")
 #' @export
-ages <- function(dat, method = "median"){
+ages <- function(dat = NULL, method = "median"){
 
   # Handling errors
   if (is.data.frame(dat) == FALSE) {
