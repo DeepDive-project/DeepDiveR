@@ -18,7 +18,7 @@
 #' # Set Carboniferous to Triassic time bins
 #' time_bins <- build_stages(start = 359, end = 200)
 #' # Summarise distribution of occurrences
-#' example1 <- generate_locality_dataset(dat = tetrapods, bins = time_bins)
+#' example1 <- generate_locality_dataset(dat = dat, bins = time_bins)
 #' @export
 generate_locality_dataset <- function(dat = NULL, bins = NULL){
 
