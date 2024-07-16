@@ -17,9 +17,9 @@
 #' @examples
 #' # Import internal dataset
 #' dat <- tetrapods
-#' #Assign ages for tetrapods
+#' # Assign ages for tetrapods
 #' dat <- ages(dat = tetrapods)
-#' # Set time bins
+#' # Set Carboniferous to Triassic time bins
 #' time_bins <- build_stages(start = 359, end = 200)
 #' # Calculate number of taxa per time bin and region
 #' example1 <- taxa_time_per_area(dat = tetrapods, bins = time_bins)
