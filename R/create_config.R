@@ -1,24 +1,42 @@
 #' Create DeepDive config object and file
 #'
-#' 'create_config()' generates a config object with settings needed to launch
-#' DeepDive scripts in python. Uses ConfigParser (Hoefling, 2017) formatting.
-#' @param simulate A TRUE/FALSE statement that switches on and off generation of simulated datasets used in model training and testing.
-#' @param model_training A TRUE/FALSE statement that switches on and off the training of new RNN models.
-#' @param empirical_predictions A TRUE/FALSE statement that switches on and off empirical analyses.
-#' @param autotune When TRUE a new config will be saved with adjusted parameters used for analyses that reflect the empirical data.
-#' @param present_diverstiy Number of extant taxa which predictions will be conditioned on. When NA no conditioning occurs.
-#' @param path_wd Working directory where files for analyses can be found.
-#' @param bins A vector of bin boundary ages.
-#' @param sim_name A string that identifies a set of simulations.
-#' @param n_areas An integer number of discrete sampling regions e.g. continents, basins.
-#' @param simulations_file File where simulations will be saved.
-#' @param add_test A TRUE/FALSE statement, when true a test set with the same settings as the training set are generated.
-#' @param models_file File where trained models can be saved and retrieved.
-#' @param feature_file File name for training features.
-#' @param label_file File name for training labels.
-#' @param empirical_input_file File name where empirical data in the input format for use in deepdive will be saved.
-#' @param output_file File where outputs will be saved.
+#' A function to generate a configuration object containing settings needed to
+#' launch DeepDive scripts in Python. Uses ConfigParser (Hoefling, 2017)
+#' formatting.
+#'
+#' @param simulate \code{logical}. A TRUE/FALSE statement that switches on and
+#'    off generation of simulated datasets used in model training and testing.
+#'    Defaults to TRUE.
+#' @param model_training \code{logical}. A TRUE/FALSE statement that switches on
+#'    and off the training of new RNN models. Defaults to TRUE.
+#' @param empirical_predictions \code{logical}. A TRUE/FALSE statement that
+#'    switches on and off empirical analyses. Defaults to TRUE.
+#' @param autotune \code{logical}. When TRUE (default), a new config will be
+#'    saved with adjusted parameters used for analyses that reflect the
+#'    empirical data.
+#' @param present_diversity \code{integer}. Number of extant taxa which
+#'    predictions will be conditioned on. When NULL (default), no conditioning
+#'    occurs.
+#' @param path_wd \code{character}. Working directory where files for analyses
+#'    can be found.
+#' @param bins \code{numeric}. A vector of bin boundary ages.
+#' @param sim_name \code{character}. A string that identifies a set of
+#'    simulations.
+#' @param n_areas \code{integer}. An integer number of discrete sampling regions
+#'    e.g. continents, basins.
+#' @param simulations_file \code{character}. File where simulations will be
+#'    saved.
+#' @param add_test \code{logical}. A TRUE/FALSE statement, when true a test set
+#'    with the same settings as the training set are generated.
+#' @param models_file \code{character}. File where trained models can be saved
+#'    and retrieved.
+#' @param feature_file \code{character}. File name for training features.
+#' @param label_file \code{character}. File name for training labels.
+#' @param empirical_input_file \code{character}. File name where empirical data
+#'    in the input format for use in DeepDive will be saved.
+#' @param output_file \code{character}. File where outputs will be saved.
 #' @returns Creates configuration file with settings to launch DeepDive.
+#'
 #' @importFrom ConfigParser #complete
 #' @examples
 #' config <- create_config(wd = paste0(getwd()), bins = time_bins,
@@ -29,7 +47,7 @@ create_config <- function(simulate = TRUE, model_training = TRUE,
                           empirical_predictions = TRUE,
 
                           autotune=TRUE,
-                          present_diversity = NA,
+                          present_diversity = NULL,
 
                           # settings needed for simulation module
                           path_wd = NULL,
@@ -44,7 +62,7 @@ create_config <- function(simulate = TRUE, model_training = TRUE,
                           feature_file = NULL,
                           label_file = NULL,
 
-                          # empirial analysis module
+                          # empirical analysis module
                           empirical_input_file = NULL,
 
                           output_file = NULL){
