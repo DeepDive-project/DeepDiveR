@@ -1,15 +1,7 @@
 #' Assign point ages for each occurrence
 #'
 #' A function to assign a single point age for each fossil occurrence from
-#' within its age range (between `MinAge` and `MaxAge`). This age can be chosen
-#' using either:
-#' - `median` (default), the median age
-#' - `random`, a random age drawn from a uniform distribution for each
-#'    occurrence
-#' - `random_by_loc`, a random age drawn from a uniform distribution that is
-#'    applied to all occurrences sampled from the same locality which also have
-#'    the same `MinAge` and `MaxAge`.
-#' The supplied `dataframe` of occurrences should not contain any `NA` values.
+#' within its age range (between `MinAge` and `MaxAge`).
 #'
 #' @param dat \code{dataframe}. The `dataframe` containing the fossil
 #'    occurrences.
@@ -17,6 +9,14 @@
 #'    `median`, `random` or `random_by_loc`.
 #' @returns The input `dataframe` with an additional column providing a
 #'    `SampledAge`.
+#' @details The assigned age can be chosen using either:
+#' - `median` (default), the median age
+#' - `random`, a random age drawn from a uniform distribution for each
+#'    occurrence
+#' - `random_by_loc`, a random age drawn from a uniform distribution that is
+#'    applied to all occurrences sampled from the same locality which also have
+#'    the same `MinAge` and `MaxAge`.
+#' The supplied `dataframe` of occurrences should not contain any `NA` values.
 #'
 #' @import dplyr
 #' @examples
