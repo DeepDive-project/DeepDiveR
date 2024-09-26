@@ -3,6 +3,9 @@ title: "Inferring the evolutionary history of the Carnivora"
 author: "Rebecca Cooper"
 date: "09/09/2024"
 output: rmarkdown::html_vignette
+editor_options: 
+  markdown: 
+    wrap: sentence
 ---
 
 ```{r setup, include = FALSE, eval = TRUE}
@@ -10,15 +13,18 @@ knitr::opts_chunk$set(echo = TRUE, include = TRUE, eval = TRUE)
 library(devtools)
 load_all()
 ```
-  
-# Introduction
-    
-`DeepDiveR` is an R package for estimating biodiversity through time from fossil occurrence data. It produces formatted input data and a configuration file that can then be executed in Python through the command line, enabling a clear and reproducible workflow. In this tutorial we will use DeepDiveR to analyse the past diversity of Carnivora, an order of mammals, using the data of Faurby et al. (2019). 
-  
-# Installation  
 
-To install the `DeepDiveR` library, it needs to be downloaded from the GitHub repository. This can be done using the package `remotes`, or manually.
-  
+# Introduction
+
+`DeepDiveR` is an R package for estimating biodiversity through time from fossil occurrence data.
+It produces formatted input data and a configuration file that can then be executed in Python through the command line, enabling a clear and reproducible workflow.
+In this tutorial we will use DeepDiveR to analyse the past diversity of Carnivora, an order of mammals, using the data of Faurby et al. (2019).
+
+# Installation
+
+To install the `DeepDiveR` library, it needs to be downloaded from the GitHub repository.
+This can be done using the package `remotes`, or manually.
+
 ```{r install, eval = FALSE}
 # Option 1: install the package from GitHub
 remotes::install_github("DeepDive-project/DeepDiveR")
@@ -35,7 +41,8 @@ library(dplyr)
 
 # Preparing the input data
 
-First we will load our carnivoran occurrence data. This is included within the `DeepDiveR` package.
+First we will load our carnivoran occurrence data.
+This is included within the `DeepDiveR` package.
 
 ```{r load_data}
 # Load Carnivora.Rdata
@@ -49,18 +56,27 @@ Next, we will view the first few rows of the `data.frame` to get a sense of its 
 head(carnivora)
 ```
 
-We can see that our `data.frame` has 5 columns, describing the taxon name, the geographic area, the minimum and maximum age range, and locality identifier. Each row in the `data.frame` corresponds to a single occurrence. This is the standard format of data needed by `DeepDiveR`, so we do not need to manipulate the data here.
+We can see that our `data.frame` has 5 columns, describing the taxon name, the geographic area, the minimum and maximum age range, and locality identifier.
+Each row in the `data.frame` corresponds to a single occurrence.
+This is the standard format of data needed by `DeepDiveR`, so we do not need to manipulate the data here.
 
-However, we do need to specify the time bins into which our occurrences will be placed. They do not need to be equally spaced, meaning we can use geological intervals if desired. Here we will use divisions based on the stages of the Cenozoic, averaged to approximately one million year duration. We will do this by describing a vector which provides the bin boundaries, in millions of years.
+However, we do need to specify the time bins into which our occurrences will be placed.
+They do not need to be equally spaced, meaning we can use geological intervals if desired.
+Here we will use divisions based on the stages of the Cenozoic, averaged to approximately one million year duration.
+We will do this by describing a vector which provides the bin boundaries, in millions of years.
 
 ```{r set_time}
 # Describe vector of bin boundaries
 bins <- c(max(dat$MaxAge), 65, 64, 63, 61.6, 60, 59.2, 58.13333, 57.06667, 56, 54.975, 53.95, 52.925, 51.9, 50.875, 49.85, 48.825, 47.8, 46.85714, 45.91429, 44.97143, 44.02857, 43.08571, 42.14286, 41.2, 40.03667, 38.87333, 37.71, 36.7575, 35.805, 34.8525, 33.9, 32.88667, 31.87333, 30.86, 29.84667, 28.83333, 27.82, 26.862, 25.904, 24.946, 23.988, 23.03, 22.16667, 21.30333, 20.44, 19.3225, 18.205, 17.0875, 15.97, 14.895, 13.82, 12.725, 11.63, 10.534, 9.438, 8.342, 7.246, 6.2895, 5.333, 4.4665, 3.6, 2.58, 1.8, 0.774, 0.129, 0)
 ```
 
-Now we can prepare the input file for `DeepDive`, using the function `prep_dd_input`. Here we need to specify the `data.frame` containing the occurrence data and vector of time bins.
-We also want to provide the number of replicates, i.e. how many times we want the occurrences to be placed into the time bins. Here we will specify 10 replicates, to illustrate the process, but a higher number of replicates is likely needed to truly capture temporal uncertainty.
-Finally, we also need to give the name of the file that we want to be created. The file takes the form `.csv`, indicating that the values are comma-separated. This will be the file we need to input into `DeepDive`.
+Now we can prepare the input file for `DeepDive`, using the function `prep_dd_input`.
+Here we need to specify the `data.frame` containing the occurrence data and vector of time bins.
+We also want to provide the number of replicates, i.e. how many times we want the occurrences to be placed into the time bins.
+Here we will specify 10 replicates, to illustrate the process, but a higher number of replicates is likely needed to truly capture temporal uncertainty.
+Finally, we also need to give the name of the file that we want to be created.
+The file takes the form `.csv`, indicating that the values are comma-separated.
+This will be the file we need to input into `DeepDive`.
 
 ```{r create_data, eval = FALSE}
 # Create input file for DeepDive
@@ -77,8 +93,10 @@ prep_dd_input(
 
 # Preparing the configuration file
 
-Now we need to create a configuration file for `DeepDive`, using the function `create_config`. Here we will describe all of the internal settings for the analysis.
-Some of the settings must be described by the user. These include...
+Now we need to create a configuration file for `DeepDive`, using the function `create_config`.
+Here we will describe all of the internal settings for the analysis.
+Some of the settings must be described by the user.
+These include...
 
 ```{r create_config}
 # Create configuration file for DeepDive
@@ -102,9 +120,10 @@ config <- create_config(
 )
 ```
 
-Other settings are autofilled by `create_config`. In order to alter these, we can...
+Other settings are autofilled by `create_config`.
+In order to alter these, we can...
 
-``` {r modify_config}
+```{r modify_config}
 # Modify one of the settings
 set_value(attribute_name = "n_training_simulations", 
           value = 100, 
@@ -112,7 +131,8 @@ set_value(attribute_name = "n_training_simulations",
           config)
 ```
 
-It is possible to allow the geographic areas available in the simulations to change through time. In order to do this, we will create an `areas_matrix` object which will be incorporated in the configuration file. 
+It is possible to allow the geographic areas available in the simulations to change through time.
+In order to do this, we will create an `areas_matrix` object which will be incorporated in the configuration file.
 Here, we will assume that dispersal of carnivorans to South America was only possible between 11 and 7 Ma.
 #The provided areas are expected to be in alphabetical order.
 Regions disappearing instead of connecting can be made by setting the label argument to: label = "end".
@@ -137,7 +157,10 @@ areas_matrix(
   label = "start")
 ```
 
-Now we need to describe the technical aspects of the neural network training and analysis process. For a reliable estimate, you will need at least 10,000 training simulations. However, for the purpose of running a quick test analysis, we will use a low number of both training and test simulations. Again we will edit the relevant parameters in the configuration file using the `set_value` function:
+Now we need to describe the technical aspects of the neural network training and analysis process.
+For a reliable estimate, you will need at least 10,000 training simulations.
+However, for the purpose of running a quick test analysis, we will use a low number of both training and test simulations.
+Again we will edit the relevant parameters in the configuration file using the `set_value` function:
 
 ```{r describe_setup}
 # Set number of training simulations to 100
@@ -158,12 +181,12 @@ Now we are ready to write the configuration file to use in the analysis:
 ```{r write_config}
 # Write the configuration file
 config$write("carnivora.ini")
-```  
+```
 
 # Executing the analysis
 
 Once the configuration and input files are created, the full DeepDive analysis, inclusive of simulation, model training and empirical predictions, can be carried out through a single command line entered in a Terminal (MacOS and Linux) or Command prompt (Windows) window executing the Python script run_dd_config.py as follows:
-  
+
 ```{python run, eval = FALSE}
 python run_dd_config.py your_path/config_file.ini
 ```
@@ -174,7 +197,12 @@ You can additionally specify a working directory where all output files are save
 python run_dd_config.py your_path/config_file.ini -wd your_working_directory -cpu 64
 ```
 
-This script will create a "simulations" folder containing the training and test sets, and a "trained_models" folder containing the trained models and plots of the training history. This folder will additionally include plots comparing the empirical and simulated fossil features (e.g. number of occurrences through time and per area, number of localities, fraction of singletons, and sampled diversity), CSV files with the predicted diversity trajectories for the test set and for the empirical dataset, and a plot of the estimated diversity trajectory.
+This script will create a "simulations" folder containing the training and test sets, and a "trained_models" folder containing the trained models and plots of the training history.
+This folder will additionally include plots comparing the empirical and simulated fossil features (e.g. number of occurrences through time and per area, number of localities, fraction of singletons, and sampled diversity), CSV files with the predicted diversity trajectories for the test set and for the empirical dataset, and a plot of the estimated diversity trajectory.
 
 # References
-Faurby, S., Werdelin, L. & Antonelli, A. (2019) Dispersal ability predicts evolutionary success among mammalian carnivores. BioRxiv, p. 755207.
+
+Faurby, S., Werdelin, L.
+& Antonelli, A.
+(2019) Dispersal ability predicts evolutionary success among mammalian carnivores.
+BioRxiv, p. 755207.
