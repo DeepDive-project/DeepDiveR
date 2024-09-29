@@ -32,6 +32,8 @@ create_config(
 
 \item{autotune}{When TRUE a new config will be saved with adjusted parameters used for analyses that reflect the empirical data.}
 
+\item{present_diversity}{Number of extant taxa which predictions will be conditioned on. When NA no conditioning occurs.}
+
 \item{path_wd}{Working directory where files for analyses can be found.}
 
 \item{bins}{A vector of bin boundary ages.}
@@ -53,8 +55,6 @@ create_config(
 \item{empirical_input_file}{File name where empirical data in the input format for use in deepdive will be saved.}
 
 \item{output_file}{File where outputs will be saved.}
-
-\item{present_diverstiy}{Number of extant taxa which predictions will be conditioned on. When NA no conditioning occurs.}
 }
 \value{
 Creates configuration file with settings to launch DeepDive.
@@ -66,5 +66,6 @@ DeepDive scripts in python. Uses ConfigParser (Hoefling, 2017) formatting.
 \examples{
 config <- create_config(wd = paste0(getwd()), bins = time_bins, 
 sim_name = "test", n_areas = length(unique(your_data$Area)), 
-simulations_file = paste0(path_dat, "simulations"), add_test = T)
+simulations_file = paste0(path_dat, "simulations"), add_test = T,
+present_diversity = 200)
 }
