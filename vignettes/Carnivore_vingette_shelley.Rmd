@@ -238,8 +238,6 @@ Also follow the instructions on that repo to install "deepdive" Python program f
 
 ### 4.B. Run Deep Dive in terminal (command line)
 
-Go back to the wd with this R file in it!
-
 We will now run the programs in Step 4.A's "deepdive" repo on your files.
 The full DeepDive analysis, inclusive of simulation, model training and empirical predictions, can be carried out through a single command line entered in a Terminal (MacOS and Linux) or Command prompt (Windows) window executing the Python script **run_dd_config.py** as follows:
 

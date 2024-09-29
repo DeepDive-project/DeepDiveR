@@ -8,13 +8,123 @@ date: "2024-09-26"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Loading in Data
+## Prepping Input File
+
+### Loading in Data
+
+```{r load_packages}
+library(DeepDiveR)
+library(dplyr)
+```
 
 ```{r}
-data(reptilia)
-dat <- reptilia
-dat
+data <- read.csv("reptilia_filtered.csv", header = TRUE, sep = ",")
+head(data)
 ```
+
+### Defining time bins by stages
+
+```{r}
+bins <- c(max(data$MaxAge),290.1, 283.5, 273, 264.3, 259.5, 252, 247, 242, 237, 227, 217)
+
+bins
+```
+
+```{r}
+range(data$MaxAge)
+range(data$MinAge)
+
+```
+
+As you can see, the lowest bin does not include our lowest MinAge. So I added 199.3 to corresponmd to the Hettangian-Sinemurian border
+
+```{r}
+bins <- c(max(data$MaxAge),290.1, 283.5, 273, 264.3, 259.5, 252, 247, 242, 237, 227, 217, 199.3)
+
+bins
+```
+
+### Combining into an Input File
+
+```{r create_data, eval = FALSE}
+# Create input file for DeepDive
+prep_dd_input(
+  # Specify occurrence data.frame
+  dat = data,
+  # Specify vector containing time bin boundaries
+  bins = bins,
+  # Specify number of replicates
+  r = 10,
+  # Specify name of created file
+  output_file = "reptilia_deepdive_input.csv")
+
+```
+
+## Configuration File
+
+Settings for the analysis
+
+### Parameters for the simulations
+
+```{r create_config}
+# Create configuration file for DeepDive
+config <- create_config(
+  # Specify where the configuration file should be saved
+  # path_wd = path_dat,
+  # Specify vector containing time bin boundaries
+  bins = bins,
+  # Specify the name for the simulations
+  sim_name="reptilia",
+  # Specify the number of geographic areas to simulate
+  n_areas = length(unique(data$Area)),
+  # Specify the name of the simulations file
+  simulations_file = "simulations_1_reptilia",
+  # Specify the name of the models file
+  models_file = "trained_models_1_reptilia",
+  # Specify the number of extant species
+  present_diversity = 0,
+  # Specify the name of the data file
+  empirical_input_file = "reptilia_deepdive_input.csv")
+```
+
+### Neural Network Architecture
+
+Settings for the neural network
+
+```{r describe_setup}
+# Set number of training simulations to 10000
+set_value(attribute_name = "n_training_simulations", 
+          value = 10000, 
+          module = "simulations",
+          config)
+
+# Set number of test simulations to 1000
+set_value(attribute_name = "n_test_simulations", 
+          value = 1000, 
+          module = "simulations",
+          config)
+```
+
+### Write the configuration file
+
+```{r write_config}
+# Write the configuration file 
+config$write("carnivora.ini")
+```
+
+We've now created the configuration and input files
+
+## Running DeepDive
+
+We will access the programs in the "deepdive" repo (not this repo) in order to run the simulations. The **Terminal** command:
+
+```{python run, eval = FALSE}
+python run_dd_config.py config_file.ini -wd reptilia/
+```
+
+### Outputs:
+
+-   
 
 ## Including Plots
 
