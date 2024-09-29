@@ -2,26 +2,43 @@
 % Please edit documentation in R/assign_ages.R
 \name{ages}
 \alias{ages}
-\title{Ages function}
+\title{Assign point ages for each occurrence}
 \usage{
-ages(dat, method)
+ages(dat = NULL, method = "median")
 }
 \arguments{
-\item{dat}{Occurrence data table}
+\item{dat}{\code{dataframe}. The \code{dataframe} containing the fossil
+occurrences.}
 
-\item{method}{Age assignment method. Either "median", "random" or
-"random_by_loc".}
+\item{method}{\code{character}. The choice of age assignment method, either
+\code{median}, \code{random} or \code{random_by_loc}.}
 }
 \value{
-Occurrence data table with additional SampledAge column
+The input \code{dataframe} with an additional column providing a
+\code{SampledAge}.
 }
 \description{
-'ages()' assigns sampled ages to each occurrence within the range on MinAge
-to MaxAge. Either using the median, a random age drawn from a uniform
-distribution, or a random age drawn from uniform distribution that is kept
-the same for occurrences which are sampled from the same locality and have
-the same MinAge and MaxAge.
+A function to assign a single point age for each fossil occurrence from
+within its age range (between \code{MinAge} and \code{MaxAge}).
+}
+\details{
+The assigned age can be chosen using either:
+\itemize{
+\item \code{median} (default), the median age
+\item \code{random}, a random age drawn from a uniform distribution for each
+occurrence
+\item \code{random_by_loc}, a random age drawn from a uniform distribution that is
+applied to all occurrences sampled from the same locality which also have
+the same \code{MinAge} and \code{MaxAge}. In this case, a column named \code{Locality}
+must be provided which gives the locality identifier for each occurrence.
+The supplied \code{dataframe} of occurrences should not contain any \code{NA} values.
+}
 }
 \examples{
-ages(dat=your_data, method="median")
+# Import internal dataset
+data(carnivora)
+# Add column of median ages
+example1 <- ages(dat = carnivora)
+# Add column of sampled ages
+example2 <- ages(dat = carnivora, method = "random_by_loc")
 }

@@ -16,9 +16,13 @@ prep_dd_input(
 \item{dat}{Data frame of occurrences with taxon ID, Area, MinAge, MaxAge and
 Locality columns.}
 
+\item{bins}{A vector of time bins}
+
 \item{r}{The number of age assignment replicates}
 
 \item{age_m}{The age assignment method}
+
+\item{output_file}{A string containing an output file name.}
 }
 \value{
 A .csv file containing: start age, midpoint and duration of time

@@ -4,7 +4,7 @@
 \name{DeepDiveR-package}
 \alias{DeepDiveR}
 \alias{DeepDiveR-package}
-\title{DeepDiveR: Set and launch DeepDive analyses.}
+\title{DeepDiveR: Prepare files for DeepDive analyses}
 \description{
 Organise input data and scripts for analysis in DeepDive.
 }
