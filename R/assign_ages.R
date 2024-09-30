@@ -4,7 +4,8 @@
 #' within its age range (between `MinAge` and `MaxAge`).
 #'
 #' @param dat \code{dataframe}. The `dataframe` containing the fossil
-#'    occurrences.
+#'    occurrences. The supplied `dataframe` of occurrences should not contain
+#'    any `NA` values.
 #' @param method \code{character}. The choice of age assignment method, either
 #'    `median`, `random` or `random_by_loc`.
 #' @returns The input `dataframe` with an additional column providing a
@@ -17,7 +18,6 @@
 #'    applied to all occurrences sampled from the same locality which also have
 #'    the same `MinAge` and `MaxAge`. In this case, a column named `Locality`
 #'    must be provided which gives the locality identifier for each occurrence.
-#' The supplied `dataframe` of occurrences should not contain any `NA` values.
 #'
 #' @importFrom dplyr distinct left_join mutate rowwise
 #' @importFrom stats median runif
@@ -80,7 +80,7 @@ ages <- function(dat = NULL, method = "median"){
     for (i in unique(dat$Locality)) {
       locate <- which(dat$Locality == i)
       loc <- dat[locate, ]
-      loc_distinct_ages <- loc %>% distinct(MinAge, MaxAge, Locality)
+      loc_distinct_ages <- distinct(loc, MinAge, MaxAge, Locality)
       SampledAge <- c()
       for(j in 1:nrow(loc_distinct_ages)){
         Age <- runif(n = 1,

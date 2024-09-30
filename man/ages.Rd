@@ -8,7 +8,8 @@ ages(dat = NULL, method = "median")
 }
 \arguments{
 \item{dat}{\code{dataframe}. The \code{dataframe} containing the fossil
-occurrences.}
+occurrences. The supplied \code{dataframe} of occurrences should not contain
+any \code{NA} values.}
 
 \item{method}{\code{character}. The choice of age assignment method, either
 \code{median}, \code{random} or \code{random_by_loc}.}
@@ -31,7 +32,6 @@ occurrence
 applied to all occurrences sampled from the same locality which also have
 the same \code{MinAge} and \code{MaxAge}. In this case, a column named \code{Locality}
 must be provided which gives the locality identifier for each occurrence.
-The supplied \code{dataframe} of occurrences should not contain any \code{NA} values.
 }
 }
 \examples{

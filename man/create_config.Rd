@@ -64,8 +64,8 @@ Creates configuration file with settings to launch DeepDive.
 DeepDive scripts in python. Uses ConfigParser (Hoefling, 2017) formatting.
 }
 \examples{
-config <- create_config(wd = paste0(getwd()), bins = time_bins, 
-sim_name = "test", n_areas = length(unique(your_data$Area)), 
+config <- create_config(wd = paste0(getwd()), bins = time_bins,
+sim_name = "test", n_areas = length(unique(your_data$Area)),
 simulations_file = paste0(path_dat, "simulations"), add_test = T,
 present_diversity = 200)
 }

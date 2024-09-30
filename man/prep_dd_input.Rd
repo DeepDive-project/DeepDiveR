@@ -2,37 +2,52 @@
 % Please edit documentation in R/deepdive_input_files.R
 \name{prep_dd_input}
 \alias{prep_dd_input}
-\title{Prepare DeepDive Input}
+\title{Prepare DeepDive data input}
 \usage{
 prep_dd_input(
-  dat = dat,
-  bins,
-  r = 10,
-  age_m = "random_by_loc",
+  dat = NULL,
+  bins = NULL,
+  r = 1,
+  age_m = "median",
   output_file = NULL
 )
 }
 \arguments{
-\item{dat}{Data frame of occurrences with taxon ID, Area, MinAge, MaxAge and
-Locality columns.}
+\item{dat}{\code{dataframe}. The \code{dataframe} describing the occurrence data,
+including \code{Taxon}, \code{Area}, \code{MinAge}, \code{MaxAge} and \code{Locality} columns. The
+supplied \code{dataframe} should not contain any \code{NA} values.}
 
-\item{bins}{A vector of time bins}
+\item{bins}{\code{dataframe}. A \code{dataframe} designating the boundaries of
+the time bins used in the analysis.}
 
-\item{r}{The number of age assignment replicates}
+\item{r}{\code{integer}. The number of age assignment replicates. Defaults
+to 1.}
 
-\item{age_m}{The age assignment method}
+\item{age_m}{\code{character}. The age assignment method. Default is
+\code{median}. See \code{ages()} for more information.}
 
-\item{output_file}{A string containing an output file name.}
+\item{output_file}{\code{character}. Defaults to \code{FALSE}, in which case the
+DeepDive input table is saved as an object. When a character string is
+provided, the object is written to a \code{csv} file with this name.}
 }
 \value{
-A .csv file containing: start age, midpoint and duration of time
-bins, counts of the number of localities per region for each bin, counts of
-occurrences of each taxon per region per time bin, the data type (bins, locs,
-occs) and replicate number (where age replicates are used, column R).
+If \code{output_file = NULL} a dataframe containing the occurrence data
+summary is returned as an object. If \code{output_file} is given a character
+string, the summary is saved to a \code{csv} file with this name, ready to
+input into DeepDive.
 }
 \description{
-'prep_dd_input()' makes a single input file for use in DeepDive in one line.
+A function to use fossil occurrence data to make input files for use in
+DeepDive.
 }
 \examples{
-prep_dd_input(dat=your_data, bins=bins, r=100, age_m = "random_by_loc")
+# Import internal dataset
+data(carnivora)
+# Generate vector describing time bin boundaries
+bins <- c(66, 23, 2.6, 0)
+# Create DeepDive input file
+example1 <- prep_dd_input(dat = carnivora, bins = bins)
+# Create DeepDive input files using random age assignment, with five reps
+example2 <- prep_dd_input(dat = carnivora, bins = bins, r = 5, age_m =
+  "random")
 }
