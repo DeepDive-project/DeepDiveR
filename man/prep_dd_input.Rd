@@ -17,8 +17,8 @@ prep_dd_input(
 including \code{Taxon}, \code{Area}, \code{MinAge}, \code{MaxAge} and \code{Locality} columns. The
 supplied \code{dataframe} should not contain any \code{NA} values.}
 
-\item{bins}{\code{dataframe}. A \code{dataframe} designating the boundaries of
-the time bins used in the analysis.}
+\item{bins}{\code{numeric}. A numerical \code{vector} designating the boundaries
+of the time bins used in the analysis.}
 
 \item{r}{\code{integer}. The number of age assignment replicates. Defaults
 to 1.}

@@ -2,26 +2,35 @@
 % Please edit documentation in R/edit_config.R
 \name{edit_config}
 \alias{edit_config}
-\title{Edit values in config}
+\title{Edit values in the configuration file}
 \usage{
-edit_config(attribute_name, value, module, config)
+edit_config(config = NULL, module = NULL, parameter = NULL, value = NULL)
 }
 \arguments{
-\item{attribute_name}{A string providing direction to the attribute you want to edit e.g. "total_sp"}
+\item{config}{\code{character}. The name of the configuration object, created
+using \code{create_config()}, that will be edited.}
 
-\item{value}{An integer or vector value you want to assign to the attribute.}
+\item{module}{\code{character}. The name of the block of the configuration
+object to which the parameter belongs.}
 
-\item{module}{A string indicating the block of the config the attribute can be found within.}
+\item{parameter}{\code{character}. The name of the parameter to edit in
+the configuration file.}
 
-\item{config}{A config which can be generated in create_config(), that you will edit here.}
+\item{value}{\code{}. The value you want to assign to the parameter. The type
+of value is dependent upon the parameter.}
 }
 \value{
-Edits settings in the config .ini file.
+A configuration object with the value of the desired parameter
+changed.
 }
 \description{
-'edit_config()' accesses attributes in the configuration file and adjusts the
-assigned value(s) to that of a provided integer or vector.
+A function to modify parameters within a configuration object for DeepDive,
+created using \code{create_config()}.
+}
+\details{
+Add full list of default parameters.
 }
 \examples{
-edit_config(attribute_name = "extant_sp", value=c(10, 10000), module="simulations", config)
+edit_config(attribute_name = "extant_sp", value=c(10, 10000),
+  module="simulations", config)
 }

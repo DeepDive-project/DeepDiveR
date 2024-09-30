@@ -6,8 +6,8 @@
 #' @param dat \code{dataframe}. The `dataframe` describing the occurrence data,
 #'    including `Taxon`, `Area`, `MinAge`, `MaxAge` and `Locality` columns. The
 #'    supplied `dataframe` should not contain any `NA` values.
-#' @param bins \code{dataframe}. A `dataframe` designating the boundaries of
-#'    the time bins used in the analysis.
+#' @param bins \code{numeric}. A numerical `vector` designating the boundaries
+#'    of the time bins used in the analysis.
 #' @param r \code{integer}. The number of age assignment replicates. Defaults
 #'    to 1.
 #' @param age_m \code{character}. The age assignment method. Default is
