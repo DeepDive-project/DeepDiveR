@@ -18,8 +18,14 @@ library(dplyr)
 ```
 
 ```{r}
-data <- read.csv("reptilia_filtered.csv", header = TRUE, sep = ",")
+data <- read.csv("reptilia_deepdive_input.csv", header = TRUE, sep = ",")
 head(data)
+```
+
+"Area" column has blanks and nulls, so I'm just going to impute with a "NA" string for now
+
+```{r}
+data$Area[is.na(data$Area)] <- "NA"
 ```
 
 ### Defining time bins by stages
@@ -109,7 +115,7 @@ set_value(attribute_name = "n_test_simulations",
 
 ```{r write_config}
 # Write the configuration file 
-config$write("carnivora.ini")
+config$write("reptilia1.ini")
 ```
 
 We've now created the configuration and input files
