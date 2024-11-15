@@ -1,6 +1,6 @@
 #' Make discrete geographic regions appear or disappear
 #'
-#' A function to modify the simulations module by providing a maximum and
+#' A function to add an area constraints module by providing a maximum and
 #'   minimum age uncertainty for geographic regions being connected to the study
 #'   system.
 #' @param config \code{character}. The name of the configuration object, created
@@ -96,7 +96,7 @@ areas_matrix <- function(config = NULL, area_ages = NULL,
     # be removed
     for(i in 1:n_areas) {
       parameter <- paste0("area_", "end", area_ages$Area[i])
-      config$data$simulations[[parameter]] <- paste(rep.int(max(bins), 2),
+      config$data$area_constraints[[parameter]] <- paste(rep.int(max(bins), 2),
                                                     collapse = " ")
     }
   }
@@ -104,7 +104,7 @@ areas_matrix <- function(config = NULL, area_ages = NULL,
   if(!is.null(area_ages) & presence == TRUE){
     for(i in 1:n_areas) {
       parameter <- paste0("area_", "start", area_ages$Area[i])
-      config$data$simulations[[parameter]] <- paste(c(area_ages$MaxAge[i],
+      config$data$area_constraints[[parameter]] <- paste(c(area_ages$MaxAge[i],
                                                 area_ages$MinAge[i]),
                                                 collapse = " ")
     }
@@ -113,7 +113,7 @@ areas_matrix <- function(config = NULL, area_ages = NULL,
   if(!is.null(area_ages) & presence == FALSE){
     for(i in 1:n_areas) {
       parameter <- paste0("area_", "end", area_ages$Area[i])
-      config$data$simulations[[parameter]] <- paste(c(area_ages$MaxAge[i],
+      config$data$area_constraints[[parameter]] <- paste(c(area_ages$MaxAge[i],
                                                 area_ages$MinAge[i]),
                                                 collapse = " ")
     }
