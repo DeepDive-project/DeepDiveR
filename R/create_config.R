@@ -29,6 +29,10 @@
 #' @param add_test \code{logical}. A TRUE/FALSE statement, when true (the
 #'    default) a test set with the same settings as the training set are
 #'    generated.
+#' @param present_diversity \code{numerical}. A numeric value describing the 
+#'    known diversity at the end of the study interval. In the case a clade is 
+#'    known to be extinct, this should be set to zero. If the end diversity is 
+#'    unknown, the default NA can be used. 
 #'
 #' @returns Creates configuration object with settings to launch DeepDive. Once
 #'   finalised, configuration files can be saved using
@@ -50,7 +54,8 @@ create_config <- function(name = NULL, data_file = NULL,
                           bins = NULL, n_areas = 1,
                           simulate = TRUE, model_training = TRUE,
                           empirical_predictions = TRUE,
-                          autotune = TRUE, add_test = TRUE){
+                          autotune = TRUE, add_test = TRUE,
+                          present_diversity = NA){
 
   # Handling errors
   if (!is.character(name)) {
@@ -100,106 +105,106 @@ create_config <- function(name = NULL, data_file = NULL,
   general$time_bins <- sort(paste(bins, collapse = " "), decreasing = TRUE)
   general$n_areas <- n_areas  # number of discrete regions
   general$autotune <- autotune
-  general$present_diversity <- NA
+  general$present_diversity <- present_diversity
+  
+  # instead of if statements, now a full config will be written and now a 
+  # T/F statement will control what is run in Python.
+  general$simulate <- simulate
+  general$model_training <- model_training
+  general$empirical_predictions <- empirical_predictions
 
   config$data$general <- general
 
   # simulations
-  if(simulate == TRUE){
-    folders <- paste0(name, "_simulations")
-    sims$sim_name <- "simulations"
-    sims$n_CPUS <- 1  # number of CPUs used for simulations
-    sims$n_training_simulations <- 10000  # total number of training simulations
-    sims$training_seed <- 123
-    if(add_test == TRUE){
-      sims$test_seed <- 432
-      sims$n_test_simulations <- 100  # total number of test simulations
-    }
-
-    sims$s_species <- 1  # number of starting species
-    sims$total_sp <- paste(100, 5000, collapse="")  # min/max size data set
-    sims$root_r <- paste(0.8*(max(bins)-min(bins))+min(bins), max(bins), collapse="")  # range of ages for origin of clade
-    sims$min_extinct_sp <- 0  # minimum number of extinct lineages allowed
-    sims$extant_sp <- paste(0, 10000, collapse="")  # min/max number of living species
-    sims$rangeL <- paste(0.02, 0.5, collapse="")  # range of birth rates
-    sims$rangeM <- paste(0.02, 0.5, collapse="")  # range of death rates
-    sims$log_uniform_rates <- FALSE
-    sims$p_mass_extinction <- 0.01  # probability of mass extinction per my
-    sims$fixed_mass_extinction <- NA  # known time of mass extinction
-    sims$magnitude_mass_ext <- paste(0.5, 1, collapse="")
-    sims$p_equilibrium <- 0.01  # probability of equilibrium per my
-    sims$p_constant_bd <- 0.01  # probability of constant birth-death rates per my
-    sims$p_mass_speciation <- 0.01  # probability of mass speciation per my
-    sims$p_dd_model <- 0.05  # probability of diversity-dependent diversification
-    sims$dd_K <- paste(100,1000, collapse = "")  # carrying capacity for dd clades
-    sims$dd_maxL <- 1 # starting sp rate for dd
-    sims$pr_extant_clade <- 0.7  # probability of simulating an extant clade
-    sims$poiL <- 4  # expected number of birth rate shifts
-    sims$poiM <- 4  # expected number of death rate shifts
-    sims$scale <- 10  # scaling
-    sims$vectorize <- TRUE  # True will vectorise the birth-death simulation.
-
-    # fossil simulator settings
-    sims$eta <- paste(1, 1.75, collapse="")  # area-sp stochasticity
-    sims$p_gap <- paste(0.01, 0.95, collapse="")  # probability of 0 preservation in a time bin
-    sims$dispersal_rate <- "None"
-    sims$max_dist <- 1
-    sims$disp_rate_mean <- paste(0, 1, collapse="")
-    sims$disp_rate_variance <- 1
-    sims$area_mean <- 20  # G(a,b) distributed preservation rates across areas
-    sims$area_variance <- 5
-    sims$size_concentration_parameter <- paste(0.1, 3, collapse="")  # single value or array of length n_areas
-    sims$link_area_size_carrying_capacity <- paste(1, 10, collapse="")  # positive, larger numbers = stronger link between area size and carrying capacity
-    sims$p_origination_a_slope_mean <- 2  # mean slope of probability of origination area mean
-    sims$p_origination_a_slope_sd <- 0.5  # standard deviations of the slopes
-    sims$sp_mean <- paste(0.1, 0.5, collapse="")  # G(a,b) distributed preservation rates across species
-    sims$sp_variance <- 2
-    sims$slope <- paste(-0.01, 0, collapse="")  # change in log-sampling rate through time (log-linear)
-    sims$intercept <- paste(0.1, 0.5, collapse="")  # initial sampling rate
-    sims$sd_through_time <- paste(0.001, 0.01, collapse="")  # st dev in log-sampling rate through time
-    sims$sd_through_time_skyline <- 1
-    sims$mean_n_epochs_skyline <- 4
-    sims$fraction_skyline_sampling <- 0.5
-    sims$mean_skyline_sampling <- paste(0.1, 10, collapse="")
-    sims$maximum_localities_per_bin <- 200
-    sims$species_per_locality_multiplier <- 1
-    sims$singletons_frequency <- 0.1  # adjusted by autotune, if autotune = FALSE set manually
-    sims$sims_folder <- paste0(name, "_simulations")
-
-    config$data$simulations <- sims
-
-    }
-
-
-  if(model_training == TRUE){
-    # Settings for training models
-    folders <- paste0(name, "_models")
-    mt <- c()
-    mt$sims_folder <- paste0(name, "_simulations")
-    mt$model_folder <- paste0(name, "_models")
-    mt$lstm_layers <- paste(64, 32, collapse="")
-    mt$dense_layer <- paste(64, 32, collapse="")
-    mt$dropout <- 0
-    mt$max_epochs <- 1000
-    mt$patience <- 10
-    mt$batch_size <- 100
-    mt$validation_split <- 0.2
-    mt$f <- paste0(name, "_feature")
-    mt$l <- paste0(name, "_label")
-    config$data$model_training <- mt
+  folders <- paste0(name, "_simulations")
+  sims$sim_name <- "simulations"
+  sims$n_CPUS <- 1  # number of CPUs used for simulations
+  sims$n_training_simulations <- 10000  # total number of training simulations
+  sims$training_seed <- 123
+  if(add_test == TRUE){
+    sims$test_seed <- 432
+    sims$n_test_simulations <- 100  # total number of test simulations
   }
+
+  sims$s_species <- 1  # number of starting species
+  sims$total_sp <- paste(100, 5000, collapse="")  # min/max size data set
+  sims$root_r <- paste(0.8*(max(bins)-min(bins))+min(bins), max(bins), collapse="")  # range of ages for origin of clade
+  sims$min_extinct_sp <- 0  # minimum number of extinct lineages allowed
+  sims$extant_sp <- paste(0, 10000, collapse="")  # min/max number of living species
+  sims$rangeL <- paste(0.02, 0.5, collapse="")  # range of birth rates
+  sims$rangeM <- paste(0.02, 0.5, collapse="")  # range of death rates
+  sims$log_uniform_rates <- FALSE
+  sims$p_mass_extinction <- 0.01  # probability of mass extinction per my
+  sims$fixed_mass_extinction <- NA  # known time of mass extinction
+  sims$magnitude_mass_ext <- paste(0.5, 1, collapse="")
+  sims$p_equilibrium <- 0.01  # probability of equilibrium per my
+  sims$p_constant_bd <- 0.01  # probability of constant birth-death rates per my
+  sims$p_mass_speciation <- 0.01  # probability of mass speciation per my
+  sims$p_dd_model <- 0.05  # probability of diversity-dependent diversification
+  sims$dd_K <- paste(100,1000, collapse = "")  # carrying capacity for dd clades
+  sims$dd_maxL <- 1 # starting sp rate for dd
+  sims$pr_extant_clade <- 0.7  # probability of simulating an extant clade
+  sims$poiL <- 4  # expected number of birth rate shifts
+  sims$poiM <- 4  # expected number of death rate shifts
+  sims$scale <- 10  # scaling
+  sims$vectorize <- TRUE  # True will vectorise the birth-death simulation.
+
+  # fossil simulator settings
+  sims$eta <- paste(1, 1.75, collapse="")  # area-sp stochasticity
+  sims$p_gap <- paste(0.01, 0.95, collapse="")  # probability of 0 preservation in a time bin
+  sims$dispersal_rate <- "None"
+  sims$max_dist <- 1
+  sims$disp_rate_mean <- paste(0, 1, collapse="")
+  sims$disp_rate_variance <- 1
+  sims$area_mean <- 20  # G(a,b) distributed preservation rates across areas
+  sims$area_variance <- 5
+  sims$size_concentration_parameter <- paste(0.1, 3, collapse="")  # single value or array of length n_areas
+  sims$link_area_size_carrying_capacity <- paste(1, 10, collapse="")  # positive, larger numbers = stronger link between area size and carrying capacity
+  sims$p_origination_a_slope_mean <- 2  # mean slope of probability of origination area mean
+  sims$p_origination_a_slope_sd <- 0.5  # standard deviations of the slopes
+  sims$sp_mean <- paste(0.1, 0.5, collapse="")  # G(a,b) distributed preservation rates across species
+  sims$sp_variance <- 2
+  sims$slope <- paste(-0.01, 0, collapse="")  # change in log-sampling rate through time (log-linear)
+  sims$intercept <- paste(0.1, 0.5, collapse="")  # initial sampling rate
+  sims$sd_through_time <- paste(0.001, 0.01, collapse="")  # st dev in log-sampling rate through time
+  sims$sd_through_time_skyline <- 1
+  sims$mean_n_epochs_skyline <- 4
+  sims$fraction_skyline_sampling <- 0.5
+  sims$mean_skyline_sampling <- paste(0.1, 10, collapse="")
+  sims$maximum_localities_per_bin <- 200
+  sims$species_per_locality_multiplier <- 1
+  sims$singletons_frequency <- 0.1  # adjusted by autotune, if autotune = FALSE set manually
+  sims$sims_folder <- paste0(name, "_simulations")
+
+  config$data$simulations <- sims
+
+
+  # Settings for training models
+  folders <- paste0(name, "_models")
+  mt <- c()
+  mt$sims_folder <- paste0(name, "_simulations")
+  mt$model_folder <- paste0(name, "_models")
+  mt$lstm_layers <- paste(64, 32, collapse="")
+  mt$dense_layer <- paste(64, 32, collapse="")
+  mt$dropout <- 0
+  mt$max_epochs <- 1000
+  mt$patience <- 10
+  mt$batch_size <- 100
+  mt$validation_split <- 0.2
+  mt$f <- paste0(name, "_feature")
+  mt$l <- paste0(name, "_label")
+  config$data$model_training <- mt
+
 
   # For empirical predictions
-  if(empirical_predictions == TRUE){
-    e <- c()
-    e$empirical_input_file <- data_file
-    e$model_folder <- paste0(name, "_models")
-    e$n_predictions <- 1  # number of predictions per input file
-    e$replicates <- 100  # number of age randomisation replicates
-    e$output_file <- paste0(name, "_output")
-    folders <- paste0(name, "_output")
-    config$data$empirical_predictions <- e
-  }
+  e <- c()
+  e$empirical_input_file <- data_file
+  e$model_folder <- paste0(name, "_models")
+  e$n_predictions <- 1  # number of predictions per input file
+  e$replicates <- 100  # number of age randomisation replicates
+  e$output_file <- paste0(name, "_output")
+  folders <- paste0(name, "_output")
+  config$data$empirical_predictions <- e
 
   return(config)
 }
