@@ -95,7 +95,7 @@ areas_matrix <- function(config = NULL, area_ages = NULL,
     # for each region, specify two ages between which connection to others will
     # be removed
     for(i in 1:n_areas) {
-      parameter <- paste0("area_", "end", i)
+      parameter <- paste0("area_", "end", area_ages$Area[i])
       config$data$simulations[[parameter]] <- paste(rep.int(max(bins), 2),
                                                     collapse = " ")
     }
@@ -103,7 +103,7 @@ areas_matrix <- function(config = NULL, area_ages = NULL,
 
   if(!is.null(area_ages) & presence == TRUE){
     for(i in 1:n_areas) {
-      parameter <- paste0("area_", "start", i)
+      parameter <- paste0("area_", "start", area_ages$Area[i])
       config$data$simulations[[parameter]] <- paste(c(area_ages$MaxAge[i],
                                                 area_ages$MinAge[i]),
                                                 collapse = " ")
@@ -112,7 +112,7 @@ areas_matrix <- function(config = NULL, area_ages = NULL,
 
   if(!is.null(area_ages) & presence == FALSE){
     for(i in 1:n_areas) {
-      parameter <- paste0("area_", "end", i)
+      parameter <- paste0("area_", "end", area_ages$Area[i])
       config$data$simulations[[parameter]] <- paste(c(area_ages$MaxAge[i],
                                                 area_ages$MinAge[i]),
                                                 collapse = " ")
