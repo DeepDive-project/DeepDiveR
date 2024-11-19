@@ -1,8 +1,8 @@
 #' Make discrete geographic regions appear or disappear
 #'
-#' A function to add an area constraints module by providing a maximum and
-#'   minimum age uncertainty for geographic regions being connected to the study
-#'   system.
+#' A function to add area constraints to new module in the configuration file 
+#' by providing a maximum and minimum age uncertainty for geographic regions 
+#' being connected to or disconnected from the study system.
 #' @param config \code{character}. The name of the configuration object, created
 #'   using `create_config()`, that will be edited.
 #' @param area_ages \code{dataframe}. If left NULL (default), all geographic
@@ -77,45 +77,51 @@ areas_matrix <- function(config = NULL, area_ages = NULL,
     # Reorder areas alphabetically
     area_ages <- area_ages[order(area_ages$Area),]
   }
+  
+  # Remove any blank spaces from area names for parameter naming
+  for(i in 1:length(area_ages[,1])){
+    area_ages[,1][i] <- gsub(" ", "", area_ages[,1][i], fixed = TRUE)
+  }
+  
 
   # Retrieve time bins from configuration file
   bins <- as.numeric(unlist(strsplit(config$data$general$time_bins, " ")))
-
+  
   if(is.null(area_ages) & presence == TRUE){
     # for each region, specify two ages between which connection to others will
     # be established
     for(i in 1:n_areas) {
-      parameter <- paste0("area_", "start", i)
+      parameter <- paste0("area_start_", area_ages$Area[i])
       config$data$simulations[[parameter]] <- paste(rep.int(max(bins), 2),
                                                     collapse = " ")
     }
   }
-
+  
   if(is.null(area_ages) & presence == FALSE){
     # for each region, specify two ages between which connection to others will
     # be removed
     for(i in 1:n_areas) {
-      parameter <- paste0("area_", "end", area_ages$Area[i])
+      parameter <- paste0("area_end_", area_ages$Area[i])
       config$data$area_constraints[[parameter]] <- paste(rep.int(max(bins), 2),
-                                                    collapse = " ")
+                                                         collapse = " ")
     }
   }
-
+  
   if(!is.null(area_ages) & presence == TRUE){
     for(i in 1:n_areas) {
-      parameter <- paste0("area_", "start", area_ages$Area[i])
+      parameter <- paste0("area_start_", area_ages$Area[i])
       config$data$area_constraints[[parameter]] <- paste(c(area_ages$MaxAge[i],
-                                                area_ages$MinAge[i]),
-                                                collapse = " ")
+                                                           area_ages$MinAge[i]),
+                                                         collapse = " ")
     }
   }
-
+  
   if(!is.null(area_ages) & presence == FALSE){
     for(i in 1:n_areas) {
-      parameter <- paste0("area_", "end", area_ages$Area[i])
+      parameter <- paste0("area_end_", area_ages$Area[i])
       config$data$area_constraints[[parameter]] <- paste(c(area_ages$MaxAge[i],
-                                                area_ages$MinAge[i]),
-                                                collapse = " ")
+                                                           area_ages$MinAge[i]),
+                                                         collapse = " ")
     }
   }
 }
