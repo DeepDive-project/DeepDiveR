@@ -50,24 +50,40 @@ add_model <- function(config = NULL, lstm_nodes = NULL, dense_nodes = NULL,
   
   
   lstm_nodes <- sort(lstm_nodes, decreasing=TRUE)
+  lstm_nodes <- paste(lstm_nodes, collapse = " ")
   dense_nodes <- sort(dense_nodes, decreasing=TRUE)
+  dense_nodes <- paste(lstm_nodes, collapse = " ")
   
   lstm_parameter_name <- paste0("lstm_model_", model_name)
   
   dense_parameter_name <- paste0("dense_model_", model_name)
   
-  # if a model name is already used, a number will be added to prevent overwriting
+  # Check if the combination of LSTM and dense nodes already exists in the config.
+  model_exists <- FALSE
+  for (existing_model in names(config$data$model_training)){
+    existing_lstms <- config$data$model_training[[existing_model]]
+    existing_dense <- config$data$model_training[[gsub("lstm_model_", "dense_model_", existing_model)]]
+    if (identical(existing_lstms, lstm_nodes) && identical(existing_dense, dense_nodes)){
+      model_exists <- TRUE
+    }
+  }
+  
+  if (model_exists == TRUE) {
+    stop("This combination of lstm_nodes and dense_nodes already exists in the config. Model has not been added to the configuration.")
+  }
+  
+  
+  # If a model name is already in use, append a number to prevent overwriting
   counter<- 1
   while(lstm_parameter_name %in% names(config$data$model_training)){
-    print("`model_name` already exists. A number will be appended to prevent overwriting.")
     lstm_parameter_name <- paste0(lstm_parameter_name, "_", counter)
     dense_parameter_name <- paste0(dense_parameter_name, "_", counter)
     counter <- counter + 1
+    print("`model_name` already exists. A number has been appended to prevent overwriting.")
   }
   
-      
+  # add model parameters to the configuration file    
   config$data$model_training[[lstm_parameter_name]] <- lstm_nodes
-  
   config$data$model_training[[dense_parameter_name]] <- dense_nodes
-  print("Model has been added.")
+  print("Model has been added to the configuration.")
 }
