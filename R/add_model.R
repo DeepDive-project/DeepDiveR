@@ -56,24 +56,18 @@ add_model <- function(config = NULL, lstm_nodes = NULL, dense_nodes = NULL,
   
   dense_parameter_name <- paste0("dense_model_", model_name)
   
-  
-  #### below is not working, was intended to check if a parameter name is
-  #### already present in the model training module and if so append 1 to the
-  #### end or something like this to prevent overwriting.
-  #### Should it be mandatory to provide a model_name so it doesn't name a param
-  #### e.g. lstm_model_
-  if (!is.null(config$data$model_training[lstm_parameter_name])){
-    print("`model_name` must be different from existing lstm entries to prevent overwriting, model name has had the value 1 appended.")
-    lstm_parameter_name <- paste0(lstm_parameter_name, 1)
+  # if a model name is already used, a number will be added to prevent overwriting
+  counter<- 1
+  while(lstm_parameter_name %in% names(config$data$model_training)){
+    print("`model_name` already exists. A number will be appended to prevent overwriting.")
+    lstm_parameter_name <- paste0(lstm_parameter_name, "_", counter)
+    dense_parameter_name <- paste0(dense_parameter_name, "_", counter)
+    counter <- counter + 1
   }
   
-  if (!is.null(config$data$model_training[dense_parameter_name])){
-    print("`model_name` must be different from existing dense entries to prevent overwriting, model name has had the value 1 appended.")
-    dense_parameter_name <- paste0(dense_parameter_name, 1)
-  }
       
   config$data$model_training[[lstm_parameter_name]] <- lstm_nodes
   
   config$data$model_training[[dense_parameter_name]] <- dense_nodes
-  
+  print("Model has been added.")
 }
