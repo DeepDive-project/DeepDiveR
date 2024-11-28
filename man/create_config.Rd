@@ -13,7 +13,8 @@ create_config(
   model_training = TRUE,
   empirical_predictions = TRUE,
   autotune = TRUE,
-  add_test = TRUE
+  add_test = TRUE,
+  present_diversity = NA
 )
 }
 \arguments{
@@ -46,6 +47,11 @@ empirical data.}
 \item{add_test}{\code{logical}. A TRUE/FALSE statement, when true (the
 default) a test set with the same settings as the training set are
 generated.}
+
+\item{present_diversity}{\code{numerical}. A numeric value describing the
+known diversity at the end of the study interval. In the case a clade is
+known to be extinct, this should be set to zero. If the end diversity is
+unknown, the default NA can be used.}
 }
 \value{
 Creates configuration object with settings to launch DeepDive. Once

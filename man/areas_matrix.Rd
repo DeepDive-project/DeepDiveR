@@ -27,9 +27,9 @@ Adds an attribute for each area (named "area1", "area2"... etc) with
 minimum and maximum certainty limits of migration becoming possible.
 }
 \description{
-A function to modify the simulations module by providing a maximum and
-minimum age uncertainty for geographic regions being connected to the study
-system.
+A function to add area constraints to new module in the configuration file
+by providing a maximum and minimum age uncertainty for geographic regions
+being connected to or disconnected from the study system.
 }
 \details{
 Note that this function does not need to be used if all geographic
