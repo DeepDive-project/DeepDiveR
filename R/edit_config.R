@@ -21,7 +21,7 @@
 #' @details A full list of parameters, and details about the values they can
 #'    take, can be viewed using `data(parameter_table)`. Parameters relating to
 #'    geographic area inclusion in the simulations are better altered using
-#'    `areas_matrix()`.
+#'    `regions_matrix()`.
 #'
 #' @import ConfigParser
 #' @importFrom R6 is.R6
@@ -34,7 +34,7 @@
 #' config <- create_config(name = "carnivora",
 #'                         data_file = "data/carnivora_deepdive_input.csv",
 #'                         bins = bins,
-#'                         n_areas = length(unique(carnivora$Area)))
+#'                         n_regions = length(unique(carnivora$Region)))
 #' # Edit configuration object
 #' edit_config(config = config, module = "general",
 #'             parameter = "present_diversity", value = 313)

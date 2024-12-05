@@ -8,7 +8,7 @@ localities_through_time(dat = NULL, bins = NULL)
 }
 \arguments{
 \item{dat}{\code{dataframe}. A \code{dataframe} containing the fossil occurrences,
-including \code{Taxon}, \code{Area}, \code{Locality} and \code{SampledAge} columns. The
+including \code{Taxon}, \code{Region}, \code{Locality} and \code{SampledAge} columns. The
 supplied \code{dataframe} should not contain any \code{NA} values.}
 
 \item{bins}{\code{numeric}. A numerical \code{vector} designating the boundaries
@@ -19,7 +19,7 @@ A \code{dataframe} of shape 'region x time bin' describing where
 occurrences are recorded.
 }
 \description{
-A function to create a \code{dataframe} of the number of localities per area and
+A function to create a \code{dataframe} of the number of localities per region and
 time bin.
 }
 \examples{

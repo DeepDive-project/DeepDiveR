@@ -23,11 +23,11 @@ test_that("create_config works", {
   expect_error(create_config(file_prefix = "files",
                              data_file = "carnivora.csv",
                              bins = c(66, 23, 2.6, 0),
-                             n_areas = "test"))
+                             n_regions = "test"))
 
   expect_error(create_config(file_prefix = "files",
                              data_file = "carnivora.csv",
                              bins = c(66, 23, 2.6, 0),
-                             n_areas = 5,
+                             n_regions = 5,
                              autotune = "test"))
 })

@@ -1,9 +1,9 @@
-#' Summarise occurrences per area per time bin
+#' Summarise occurrences per region per time bin
 #'
 #' A function to produce a `dataframe` of the number of occurrences found in
 #'    each geographic area in each time bin.
 #' @param dat \code{dataframe}. The `dataframe` describing the occurrence data,
-#'    including `Taxon`, `Area`, `Locality` and `SampledAge` columns. The
+#'    including `Taxon`, `Region`, `Locality` and `SampledAge` columns. The
 #'    supplied `dataframe` should not contain any `NA` values.
 #' @param bins \code{numeric}. A numerical `vector` designating the boundaries
 #'    of the time bins used in the analysis.
@@ -19,10 +19,10 @@
 #' bins <- c(66, 23, 2.6, 0)
 #' # Generate sampled ages using the "median" method
 #' carnivora <- ages(dat = carnivora)
-#' # Compute occurrences per area and time
-#' occs_area_time(dat = carnivora, bins = bins)
+#' # Compute occurrences per region and time
+#' occs_region_time(dat = carnivora, bins = bins)
 #' @export
-occs_area_time <- function(dat = NULL, bins = NULL){
+occs_region_time <- function(dat = NULL, bins = NULL){
 
   # Handling errors
   if (is.data.frame(dat) == FALSE) {
@@ -42,10 +42,10 @@ occs_area_time <- function(dat = NULL, bins = NULL){
   }
 
   if ("Taxon" %in% colnames(dat) == FALSE ||
-      "Area" %in% colnames(dat) == FALSE ||
+      "Region" %in% colnames(dat) == FALSE ||
       "Locality" %in% colnames(dat) == FALSE ||
       "SampledAge" %in% colnames(dat) == FALSE) {
-    stop("`dat` does not contain columns `Taxon`, `Area`, `Locality` and
+    stop("`dat` does not contain columns `Taxon`, `Region`, `Locality` and
          `SampledAge`")
   }
 
@@ -53,23 +53,23 @@ occs_area_time <- function(dat = NULL, bins = NULL){
     stop("`SampledAge` column is not of numeric class")
   }
 
-  # Split data by area
-  area_tables <- split(dat, f = dat$Area)
+  # Split data by region
+  region_tables <- split(dat, f = dat$Region)
 
-  # List unique areas
-  list_areas <-  sort(unique(dat$Area))
+  # List unique regions
+  list_regions <-  sort(unique(dat$Region))
 
   # Create empty dataframe
-  n_occurrences <- data.frame(matrix(0, length(list_areas), length(bins) - 1))
+  n_occurrences <- data.frame(matrix(0, length(list_regions), length(bins) - 1))
   bins <- sort(-abs(bins))
 
-  for (i in seq_len(length(list_areas))){
-    # Identify occurrences within the area
-    indices_areas <- which(dat$Area == list_areas[i])
+  for (i in seq_len(length(list_regions))){
+    # Identify occurrences within the region
+    indices_regions <- which(dat$Region == list_regions[i])
     # Count occurrences
-    total_occs_for_area <- length(indices_areas)
-    area_dat <- dat[indices_areas,]
-    age_occs <- area_dat$SampledAge
+    total_occs_for_region <- length(indices_regions)
+    region_dat <- dat[indices_regions,]
+    age_occs <- region_dat$SampledAge
     # Bin the occurrences through time
     h <- hist(x = -as.numeric(age_occs), breaks = bins, plot = FALSE)
     n_occurrences[i,] <- h$counts
@@ -77,7 +77,7 @@ occs_area_time <- function(dat = NULL, bins = NULL){
 
   # Annotate table
   colnames(n_occurrences) <- sprintf("t%d", seq(length(bins) - 1))
-  row.names(n_occurrences) <- list_areas
+  row.names(n_occurrences) <- list_regions
 
   return(data.frame(n_occurrences))
 }

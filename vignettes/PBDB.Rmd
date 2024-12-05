@@ -31,7 +31,7 @@ remotes::install_github("DeepDive-project/DeepDiveR")
 # load_all(".")
 ```
 
-We can then load the `DeepDiveR` package. We will also load `dplyr`, which we will use for data manipulation, and `countrycode`, which will prove useful for setting up our geographic areas.
+We can then load the `DeepDiveR` package. We will also load `dplyr`, which we will use for data manipulation, and `countrycode`, which will prove useful for setting up our geographic regions.
 
 ```{r load_packages}
 library(DeepDiveR)
@@ -92,7 +92,7 @@ Great, that seems to have fixed our problem. We can now start thinking about for
 
 # Formatting the data
 
-To be ready for `DeepDiveR`, we need to distill the data into 5 columns, describing the taxon name, the geographic area where it occurs, the minimum and maximum age range, and a locality identifier. Some of these columns already exist in our PBDB `data.frame`: we can use `accepted_name` as the taxon name, `max_ma` and `min_ma` for our age range, and `collection_no` as the locality identifier.
+To be ready for `DeepDiveR`, we need to distill the data into 5 columns, describing the taxon name, the geographic region where it occurs, the minimum and maximum age range, and a locality identifier. Some of these columns already exist in our PBDB `data.frame`: we can use `accepted_name` as the taxon name, `max_ma` and `min_ma` for our age range, and `collection_no` as the locality identifier.
 
 Designating the geographic areas is a little more complex. We have a column named `cc` in the dataset, which gives the code of the country in which the fossil was found. Let's look at the different values available for canids:
 
@@ -148,9 +148,9 @@ A high proportion of canid fossils have famously been found in North America, so
 We have conducted all of the necessary data wrangling, so now we can compile the data columns we need into a `data.frame` for `DeepDiveR`.
 
 ```{r create_dataframe}
-# Create dataframe containing taxon name, the geographic area where it occurs, the minimum and maximum age range, and a locality identifier
+# Create dataframe containing taxon name, the region where it occurs, the minimum and maximum age range, and a locality identifier
 canid_data <- data.frame(Taxon = Canidae$accepted_name,
-                         Area = Canidae$continent,
+                         Region = Canidae$continent,
                          MinAge = Canidae$min_ma,
                          MaxAge = Canidae$max_ma,
                          Locality = Canidae$collection_no)

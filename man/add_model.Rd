@@ -45,7 +45,7 @@ bins <- c(66, 23, 2.6, 0)
 config <- create_config(name = "carnivora",
                         data_file = "data/carnivora_deepdive_input.csv",
                         bins = bins,
-                        n_areas = length(unique(carnivora$Area)))
+                        n_regions = length(unique(carnivora$Region)))
 # Add model architectures to the config file
 add_model(config = config, lstm_nodes = c(128, 64), dense_nodes = c(64, 32), name = "1")
 }

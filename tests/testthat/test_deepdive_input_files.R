@@ -1,7 +1,7 @@
 test_that("prep_dd_input works", {
   # Test dataset
   dat <- data.frame(Taxon = c("A", "B", "C", "D", "E"),
-                    Area = c("Europe", "Europe", "Asia", "Asia", "Asia"),
+                    Region = c("Europe", "Europe", "Asia", "Asia", "Asia"),
                     MinAge = c(0, 0, 5, 10, 10),
                     MaxAge = c(5, 10, 10, 20, 20),
                     Locality = c(1, 2, 3, 4, 4))
@@ -33,10 +33,10 @@ test_that("prep_dd_input works", {
   dat$MinAge <- as.factor(dat$MinAge)
   expect_error(prep_dd_input(dat = dat, bins = bins))
 
-  colnames(dat) <- c("Taxon", "Area", "MinAge", "MaxAge", "Locality")
+  colnames(dat) <- c("Taxon", "Region", "MinAge", "MaxAge", "Locality")
   expect_error(prep_dd_input(dat = dat, bins = bins, r = "test"))
 
-  colnames(dat) <- c("Taxon", "Area", "MinAge", "MaxAge", "Loc")
+  colnames(dat) <- c("Taxon", "Region", "MinAge", "MaxAge", "Loc")
   expect_error(prep_dd_input(dat = dat, age_m = "random_by_loc"))
 
   expect_error(prep_dd_input(dat = dat, bins = bins, output_file = dat))

@@ -1,9 +1,9 @@
 #' Summarise locality occupation through time
 #'
-#' A function to create a `dataframe` of the number of localities per area and
+#' A function to create a `dataframe` of the number of localities per region and
 #' time bin.
 #' @param dat \code{dataframe}. A `dataframe` containing the fossil occurrences,
-#'    including `Taxon`, `Area`, `Locality` and `SampledAge` columns. The
+#'    including `Taxon`, `Region`, `Locality` and `SampledAge` columns. The
 #'    supplied `dataframe` should not contain any `NA` values.
 #' @param bins \code{numeric}. A numerical `vector` designating the boundaries
 #'    of the time bins used in the analysis.
@@ -42,10 +42,10 @@ localities_through_time <- function(dat = NULL, bins = NULL){
   }
 
   if ("Taxon" %in% colnames(dat) == FALSE ||
-      "Area" %in% colnames(dat) == FALSE ||
+      "Region" %in% colnames(dat) == FALSE ||
       "Locality" %in% colnames(dat) == FALSE ||
       "SampledAge" %in% colnames(dat) == FALSE) {
-    stop("`dat` does not contain columns `Taxon`, `Area`, `Locality` and
+    stop("`dat` does not contain columns `Taxon`, `Region`, `Locality` and
          `SampledAge`")
   }
 
@@ -53,34 +53,34 @@ localities_through_time <- function(dat = NULL, bins = NULL){
       stop("`SampledAge` column is not of numeric class")
   }
 
-  # Concatenate Area and Locality
-  dat$Locality <- paste(dat$Area,dat$Locality)
+  # Concatenate Region and Locality
+  dat$Locality <- paste(dat$Region,dat$Locality)
 
   # List unique localities
-  list_areas <- sort(unique(dat$Area))
+  list_regions <- sort(unique(dat$Region))
 
   # Create empty dataframe
-  localities <- data.frame(matrix(0, length(list_areas), length(bins) - 1))
+  localities <- data.frame(matrix(0, length(list_regions), length(bins) - 1))
   bins <- sort(-abs(bins))
 
-  for (i in seq_len(length(list_areas))) {
-    # Identify occurrences linked to one area
-    indices_areas <- which(dat$Area == list_areas[i])
-    locality_ids <- dat[indices_areas,]$Locality
-    # Count the unique localities associated with that area
+  for (i in seq_len(length(list_regions))) {
+    # Identify occurrences linked to one region
+    indices_regions <- which(dat$Region == list_regions[i])
+    locality_ids <- dat[indices_regions,]$Locality
+    # Count the unique localities associated with that region
     uni_loc_ids <- unique(locality_ids)
-    no_loc_in_area <- c()
+    no_loc_in_region <- c()
     for(j in uni_loc_ids){
       t <- dat$SampledAge[which(dat$Locality == j)]
-      no_loc_in_area <- c(no_loc_in_area, unique(t))
+      no_loc_in_region <- c(no_loc_in_region, unique(t))
     }
     # Bin the localities by time
-    h <- hist(x = -as.numeric(no_loc_in_area), breaks = bins, plot = FALSE)
+    h <- hist(x = -as.numeric(no_loc_in_region), breaks = bins, plot = FALSE)
     localities[i,] <- h$counts
   }
   # Annotate table
   colnames(localities) <- sprintf("t%d", seq(length(bins) - 1))
-  locs <- cbind(Type = "locs", Area = list_areas, localities)
+  locs <- cbind(Type = "locs", Region = list_regions, localities)
 
   return(data.frame(locs))
 }

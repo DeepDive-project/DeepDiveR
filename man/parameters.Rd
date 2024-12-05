@@ -10,6 +10,7 @@ A data frame with 80 rows and 6 columns:
 \item{module}{The module in the configuration file within which the
 parameter can be found.}
 \item{parameter}{The name of the parameter.}
+\item{description}{A brief description of the parameter.}
 \item{default}{The default value given to the parameter when the
 configuration file is created.}
 \item{autotune}{A logical value describing whether the parameter can be

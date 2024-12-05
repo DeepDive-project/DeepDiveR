@@ -14,7 +14,7 @@ prep_dd_input(
 }
 \arguments{
 \item{dat}{\code{dataframe}. The \code{dataframe} describing the occurrence data,
-including \code{Taxon}, \code{Area}, \code{MinAge}, \code{MaxAge} and \code{Locality} columns. The
+including \code{Taxon}, \code{Region}, \code{MinAge}, \code{MaxAge} and \code{Locality} columns. The
 supplied \code{dataframe} should not contain any \code{NA} values.}
 
 \item{bins}{\code{numeric}. A numerical \code{vector} designating the boundaries

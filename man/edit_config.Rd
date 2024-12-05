@@ -35,7 +35,7 @@ it is possible for the specific parameter to hold the desired value.
 A full list of parameters, and details about the values they can
 take, can be viewed using \code{data(parameter_table)}. Parameters relating to
 geographic area inclusion in the simulations are better altered using
-\code{areas_matrix()}.
+\code{regions_matrix()}.
 }
 \examples{
 # Import internal dataset
@@ -46,7 +46,7 @@ bins <- c(66, 23, 2.6, 0)
 config <- create_config(name = "carnivora",
                         data_file = "data/carnivora_deepdive_input.csv",
                         bins = bins,
-                        n_areas = length(unique(carnivora$Area)))
+                        n_regions = length(unique(carnivora$Region)))
 # Edit configuration object
 edit_config(config = config, module = "general",
             parameter = "present_diversity", value = 313)

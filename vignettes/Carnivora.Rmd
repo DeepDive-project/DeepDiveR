@@ -53,7 +53,7 @@ Next, we will view the first few rows of the `data.frame` to get a sense of its 
 head(carnivora)
 ```
 
-We can see that our `data.frame` has 5 columns, describing the taxon name, the geographic area where it occurs, the minimum and maximum age range, and a locality identifier. Each row in the `data.frame` corresponds to a single occurrence. This is the standard format of data needed by `DeepDiveR`, so we do not need to manipulate the data here.
+We can see that our `data.frame` has 5 columns, describing the taxon name, the geographic region where it occurs, the minimum and maximum age range, and a locality identifier. Each row in the `data.frame` corresponds to a single occurrence. This is the standard format of data needed by `DeepDiveR`, so we do not need to manipulate the data here.
 
 However, we do need to specify the time bins into which our occurrences will be placed. They do not need to be equally spaced, geological intervals can be used if desired. Here we will use divisions based on the stages of the Cenozoic, averaged to approximately one million year duration. We will do this by describing a vector which provides the bin boundaries, in millions of years.
 
@@ -94,8 +94,8 @@ config <- create_config(
   data_file = "carnivora_deepdive_input.csv",
   # Specify vector containing time bin boundaries
   bins = bins,
-  # Specify the number of geographic areas to simulate
-  n_areas = length(unique(carnivora$Area))
+  # Specify the number of geographic regions to simulate
+  n_regions = length(unique(carnivora$Region))
 )
 ```
 
@@ -109,23 +109,23 @@ edit_config(config = config,
             value = 313)
 ```
 
-It is possible to allow the geographic areas available in the simulations to change through time. In order to do this, we will create an `areas_matrix` object which will be incorporated in the configuration file. 
+It is possible to allow the geographic regions available in the simulations to change through time. In order to do this, we will create an `regions_matrix` object which will be incorporated in the configuration file. 
 Here, we will assume that dispersal of carnivorans to South America was started between 11 and 7 Ma. Regions disappearing instead of connecting can be made by setting the label argument to: presence = "FALSE".
 
 ```{r geog_limits}
-# Create data.frame describing the time for which each area is available
-area_ages <- rbind(c("Africa", max(bins), max(bins)), 
+# Create data.frame describing the time for which each region is available
+region_ages <- rbind(c("Africa", max(bins), max(bins)), 
                    c("Asia", max(bins), max(bins)),
                    c("Europe", max(bins), max(bins)),
                    c("North America", max(bins), max(bins)),
                    c("South America", 11.608, 7.3))
-area_ages <- as.data.frame(area_ages)
+region_ages <- as.data.frame(region_ages)
 
 # Label columns
-colnames(area_ages) <- c("Area", "MaxAge", "MinAge")
+colnames(region_ages) <- c("Region", "MaxAge", "MinAge")
 
-# Connect area data to configuration file
-areas_matrix(config = config, area_ages = area_ages)
+# Connect region data to configuration file
+regions_matrix(config = config, region_ages = region_ages)
 ```
 
 Now we need to describe the technical aspects of the neural network training and analysis process. For a reliable estimate, you will need at least 10,000 training simulations. However, for the purpose of running a quick test analysis, we will use a low number of both training and test simulations. Again we will edit the relevant parameters in the configuration file using the `edit_config` function:
@@ -165,7 +165,7 @@ You can additionally specify a working directory where all output files are save
 python run_dd_config.py your_path/config_file.ini -wd your_working_directory -cpu 64
 ```
 
-This script will create a "simulations" folder containing the training and test sets and a "trained_models" folder containing the trained models and plots of training history. This folder additionally includes plots of features of the empirical and simulated records (e.g. number of occurrences through time and per area, number of localities, fraction of singletons and sampled diversity), CSV files with the predicted diversity trajectories for the test set and for the empirical dataset, and a plot of the estimated diversity trajectory.
+This script will create a "simulations" folder containing the training and test sets and a "trained_models" folder containing the trained models and plots of training history. This folder additionally includes plots of features of the empirical and simulated records (e.g. number of occurrences through time and per region, number of localities, fraction of singletons and sampled diversity), CSV files with the predicted diversity trajectories for the test set and for the empirical dataset, and a plot of the estimated diversity trajectory.
 
 # References
 Faurby, S., Silvestro, D., Werdelin, L. & Antonelli, A. (2024) Reliable biogeography requires fossils: insights from a new species-level phylogeny of extinct and living carnivores. Proceedings of the Royal Society B, 291(2028), 20240473.

@@ -4,7 +4,7 @@
 #' DeepDive.
 #'
 #' @param dat \code{dataframe}. The `dataframe` describing the occurrence data,
-#'    including `Taxon`, `Area`, `MinAge`, `MaxAge` and `Locality` columns. The
+#'    including `Taxon`, `Region`, `MinAge`, `MaxAge` and `Locality` columns. The
 #'    supplied `dataframe` should not contain any `NA` values.
 #' @param bins \code{numeric}. A numerical `vector` designating the boundaries
 #'    of the time bins used in the analysis.
@@ -48,8 +48,8 @@ prep_dd_input <- function(dat = NULL, bins = NULL, r = 100,
     stop(paste("NA values detected in dataframe."))
   }
 
-  if (length(unique(dat$Area)) < 2) {
-    stop(paste("At least two unique Areas must be present in dataframe."))
+  if (length(unique(dat$Region)) < 2) {
+    stop(paste("At least two unique Regions must be present in dataframe."))
   }
 
   if (is.vector(bins) == FALSE) {
@@ -61,11 +61,11 @@ prep_dd_input <- function(dat = NULL, bins = NULL, r = 100,
   }
 
   if ("Taxon" %in% colnames(dat) == FALSE ||
-      "Area" %in% colnames(dat) == FALSE ||
+      "Region" %in% colnames(dat) == FALSE ||
       "MinAge" %in% colnames(dat) == FALSE ||
       "MaxAge" %in% colnames(dat) == FALSE ||
       "Locality" %in% colnames(dat) == FALSE) {
-    stop("`dat` does not contain columns `Taxon`, `Area`, `MinAge`, `MaxAge`,
+    stop("`dat` does not contain columns `Taxon`, `Region`, `MinAge`, `MaxAge`,
          and `Locality`.")
   }
 
@@ -107,7 +107,7 @@ prep_dd_input <- function(dat = NULL, bins = NULL, r = 100,
     sampled_dat <- ages(dat, method = age_m)
 
     # Get species or genera level data
-    occs <- taxa_area_time(dat = sampled_dat, bins = bins)
+    occs <- taxa_region_time(dat = sampled_dat, bins = bins)
     cnames <- c(colnames(occs))
 
     # Get locality data

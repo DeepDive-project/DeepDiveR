@@ -1,4 +1,4 @@
-test_that("localities_through_time works", {
+test_that("taxa_region_time works", {
   # Test dataset
   dat <- data.frame(Taxon = c("A", "B", "C", "D", "E"),
                     Region = c("Europe", "Europe", "Asia", "Asia", "Asia"),
@@ -7,26 +7,22 @@ test_that("localities_through_time works", {
 
   bins <- c(66, 23, 2.6, 0)
 
-  # Expect equal
-  expect_equal(nrow(localities_through_time(dat = dat, bins = bins)),
-               length(unique(dat$Region)))
-
   # Expect error
-  expect_error(localities_through_time())
+  expect_error(taxa_region_time())
 
   dat$Locality <- c(NA, 2, 3, 4, 4)
-  expect_error(localities_through_time(dat = dat))
+  expect_error(taxa_region_time(dat = dat))
 
   dat$Locality <- c(1, 2, 3, 4, 4)
-  expect_error(localities_through_time(dat = dat, bins = "test"))
+  expect_error(taxa_region_time(dat = dat, bins = "test"))
 
-  expect_error(localities_through_time(dat = dat, bins = c("Taxon", "Min",
+  expect_error(taxa_region_time(dat = dat, bins = c("Taxon", "Min",
                                                            "MaxAge")))
 
   colnames(dat) <- c("Taxon", "test", "Locality", "SampledAge")
-  expect_error(localities_through_time(dat = dat, bins = bins))
+  expect_error(taxa_region_time(dat = dat, bins = bins))
 
   colnames(dat) <- c("Taxon", "Region", "Locality", "SampledAge")
   dat$SampledAge <- as.factor(dat$SampledAge)
-  expect_error(localities_through_time(dat = dat, bins = bins))
+  expect_error(taxa_region_time(dat = dat, bins = bins))
 })
