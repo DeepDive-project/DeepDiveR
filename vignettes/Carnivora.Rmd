@@ -144,6 +144,17 @@ edit_config(config = config,
             value = 10)
 ```
 
+It is possible to train multiple models with varying neural network architectures. Primarily, the number of Long Short-Term Memory layers and nodes can be varied along with the layers and nodes in the dense layer of the network. These can be single numbers e.g. 32, in which case 32 nodes will be implemented in one fully connected layer. Alternatively a vector can be used e.g. c(64, 32). In the latter example, two layers of fully connected nodes would be implemented with 64 nodes and 32 nodes respectively. These settings are added to the configuration file using the function `add_model` which should be called once for each model architecture:
+
+```{r add_model}
+# Set number of LSTM and dense nodes for an additional model architecture
+add_model(config = config,
+          lstm_nodes = c(128, 64),
+          dense_nodes = c(128, 64), 
+          name = "1")
+
+```
+
 Now we are ready to write the configuration file to use in the analysis:
 
 ```{r write_config, eval = FALSE}
