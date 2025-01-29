@@ -126,7 +126,7 @@ create_config <- function(name = NULL, data_file = NULL,
     sims$n_test_simulations <- 100  # total number of test simulations
   }
 
-  sims$s_species <- NA  # number of starting species
+  sims$s_species <- 1  # number of starting species
   sims$total_sp <- NA  # min/max size data set
   sims$root_r <- paste(0.8*(max(bins)-min(bins))+min(bins), max(bins), collapse="")  # range of ages for origin of clade
   sims$min_extinct_sp <- 0  # minimum number of extinct lineages allowed
@@ -155,9 +155,9 @@ create_config <- function(name = NULL, data_file = NULL,
   sims$dispersal_rate <- "None"
   sims$max_dist <- 1
   sims$disp_rate_mean <- NA
-  sims$disp_rate_variance <- NA
+  sims$disp_rate_variance <- 1
   sims$region_mean <- NA  # G(a,b) distributed preservation rates across areas
-  sims$region_variance <- 5
+  sims$region_variance <- NA
   sims$size_concentration_parameter <- paste(0.1, 3, collapse="")  # single value or array of length n_areas
   sims$link_region_size_carrying_capacity <- paste(1, 10, collapse="")  # positive, larger numbers = stronger link between area size and carrying capacity
   sims$p_origination_a_slope_mean <- 2  # mean slope of probability of origination area mean
@@ -183,6 +183,7 @@ create_config <- function(name = NULL, data_file = NULL,
   sims$locality_rate_multiplier <- NA
   sims$bin_sampling <- NA
   sims$min_n_occurrences <- NA
+  sims$survive_age_condition <- NA
 
 
   config$data$simulations <- sims
