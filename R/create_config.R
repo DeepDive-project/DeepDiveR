@@ -97,23 +97,28 @@ create_config <- function(name = NULL, data_file = NULL,
 
   # Create configuration file frame
   config <- ConfigParser$new()
-  sims <- c()
+
+  # Create subsections
+  config$data$general <- c()
+  config$data$simulations <- c()
+  config$data$model_training <- c()
+  config$data$empirical_predictions <- c()
 
   # general directory
-  general <- c()
-  general$wd <- getwd()
-  general$time_bins <- sort(paste(bins, collapse = " "), decreasing = TRUE)
-  general$n_regions <- n_regions  # number of discrete regions
-  general$autotune <- autotune
-  general$present_diversity <- present_diversity
+  general_settings <- parameters[parameters$module == "general",]
 
-  # instead of if statements, now a full config will be written and now a
-  # T/F statement will control what is run in Python.
-  general$simulate <- simulate
-  general$model_training <- model_training
-  general$empirical_predictions <- empirical_predictions
+  for (a in 1:nrow(general_settings)) {
+    config$data$general[[general_settings[a,2]]] <- general_settings[a,3]
+  }
 
-  config$data$general <- general
+  #Old code
+  #general$time_bins <- sort(paste(bins, collapse = " "), decreasing = TRUE)
+  #general$n_regions <- n_regions  # number of discrete regions
+  #general$autotune <- autotune
+  #general$present_diversity <- present_diversity
+  #general$simulate <- simulate
+  #general$model_training <- model_training
+  #general$empirical_predictions <- empirical_predictions
 
   # simulations
   folders <- paste0(name, "_simulations")
@@ -185,10 +190,6 @@ create_config <- function(name = NULL, data_file = NULL,
   sims$min_n_occurrences <- NA
   sims$survive_age_condition <- NA
 
-
-  config$data$simulations <- sims
-
-
   # Settings for training models
   folders <- paste0(name, "_models")
   mt <- c()
@@ -203,7 +204,6 @@ create_config <- function(name = NULL, data_file = NULL,
   mt$validation_split <- 0.2
   mt$f <- paste0(name, "_feature")
   mt$l <- paste0(name, "_label")
-  config$data$model_training <- mt
 
 
   # For empirical predictions
@@ -214,7 +214,6 @@ create_config <- function(name = NULL, data_file = NULL,
   e$replicates <- 100  # number of age randomisation replicates
   e$output_file <- paste0(name, "_output")
   folders <- paste0(name, "_output")
-  config$data$empirical_predictions <- e
 
   return(config)
 }
