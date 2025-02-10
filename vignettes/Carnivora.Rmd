@@ -99,7 +99,14 @@ config <- create_config(
 )
 ```
 
-Other settings are autofilled by `create_config()`. In order to alter these, we can use the function `edit_config()`. First, we know that there are 313 extant carnivorans, so let's condition our simulations on this number of living species.
+Other settings are autofilled by `create_config()`. We can view the table which describes all of the parameters in the config: this allows us to see the available parameters, their default values, and a brief description.
+
+``` {r view_parameters}
+#View the parameters
+parameters$parameter
+```
+
+We can now edit these parameter values if we wish to, using the function `edit_config()`. We know that there are 313 extant carnivorans, so let's condition our simulations on this number of living species.
 
 ``` {r modify_config}
 # Modify the number of extant species ("present_diversity") in simulations

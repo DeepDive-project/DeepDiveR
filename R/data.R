@@ -54,11 +54,14 @@
 #'   \item{module}{The module in the configuration file within which the
 #'      parameter can be found.}
 #'   \item{parameter}{The name of the parameter.}
-#'   \item{description}{A brief description of the parameter.}
 #'   \item{default}{The default value given to the parameter when the
 #'      configuration file is created.}
+#'   \item{description}{A brief description of the parameter.}
 #'   \item{autotune}{A logical value describing whether the parameter can be
 #'      autotuned (TRUE) or not (FALSE).}
-#'   \item{limits}{The type of value which can be attributed to the parameter.}
+#'   \item{autotune.notes}{A description of the procedure conducted when the
+#'      parameters is set to autotune.}
+#'   \item{limits}{The type of value(s) which can be attributed to the
+#'      parameter.}
 #' }
 "parameters"
