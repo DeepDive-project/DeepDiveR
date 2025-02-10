@@ -95,6 +95,14 @@ create_config <- function(name = NULL, data_file = NULL,
          `add_test` must all be TRUE or FALSE.")
       }
 
+  # Load parameter table
+  data(parameters)
+
+  # If autotune is TRUE, set autotuned parameters to NA
+  if (autotune == TRUE) {
+    parameters$default[which(parameters$autotune == TRUE)] <- NA
+  }
+
   # Create configuration file frame
   config <- ConfigParser$new()
 
@@ -150,6 +158,10 @@ create_config <- function(name = NULL, data_file = NULL,
   config$data$general$empirical_predictions <- empirical_predictions
 
   config$data$empirical_predictions$empirical_input_file <- data_file
+
+  # Set autotune parameters to NA
+  config$data$general$autotune <- autotune
+
 
   #Rename files/folders when name is provided
   if (!is.null(name)) {
