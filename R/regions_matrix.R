@@ -45,7 +45,7 @@
 #' # Label columns
 #' colnames(region_ages) <- c("Region", "MaxAge", "MinAge")
 #' # Connect region data to configuration file
-#' region_matrix(config = config, region_ages = region_ages)
+#' regions_matrix(config = config, region_ages = region_ages)
 #' @export
 regions_matrix <- function(config = NULL, region_ages = NULL,
                          presence = TRUE) {

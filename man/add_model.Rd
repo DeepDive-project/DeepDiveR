@@ -47,5 +47,6 @@ config <- create_config(name = "carnivora",
                         bins = bins,
                         n_regions = length(unique(carnivora$Region)))
 # Add model architectures to the config file
-add_model(config = config, lstm_nodes = c(128, 64), dense_nodes = c(64, 32), name = "1")
+add_model(config = config, lstm_nodes = c(128, 64), dense_nodes = c(64, 32),
+          model_name = "1")
 }
