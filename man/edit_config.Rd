@@ -4,14 +4,11 @@
 \alias{edit_config}
 \title{Edit values in the configuration file}
 \usage{
-edit_config(config = NULL, module = NULL, parameter = NULL, value = NULL)
+edit_config(config = NULL, parameter = NULL, value = NULL)
 }
 \arguments{
 \item{config}{\code{character}. The name of the configuration object, created
 using \code{create_config()}, that will be edited.}
-
-\item{module}{\code{character}. The name of the block of the configuration
-object to which the parameter belongs.}
 
 \item{parameter}{\code{character}. The name of the parameter to edit in
 the configuration file.}
@@ -33,7 +30,7 @@ it is possible for the specific parameter to hold the desired value.
 }
 \details{
 A full list of parameters, and details about the values they can
-take, can be viewed using \code{data(parameter_table)}. Parameters relating to
+take, can be viewed using \code{data(parameters)}. Parameters relating to
 geographic area inclusion in the simulations are better altered using
 \code{regions_matrix()}.
 }
