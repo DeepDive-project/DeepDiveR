@@ -8,6 +8,8 @@
 #'
 #' @param config \code{character}. The name of the configuration object, created
 #'   using `create_config()`, that will be edited.
+#' @param module \code{character}. The name of the module to edit in
+#'   the configuration file. This can be "general", "simulations", "model_training", "empirical_predictions" or "region_constraints" (the latter is only available after running regions_matrix())
 #' @param parameter \code{character}. The name of the parameter to edit in
 #'   the configuration file.
 #' @param value \code{}. The value you want to assign to the parameter. The type
@@ -39,7 +41,7 @@
 #'             parameter = "present_diversity", value = 313)
 #'
 #' @export
-edit_config <- function(config = NULL, parameter = NULL, value = NULL){
+edit_config <- function(config = NULL, module=NULL, parameter = NULL, value = NULL){
 
   # Load parameter table
   data(parameters)
@@ -140,8 +142,6 @@ edit_config <- function(config = NULL, parameter = NULL, value = NULL){
             c(0.1, 1.5).")
     }
   }
-
-  # ADD CODE FOR PARAMETERS IN SEVERAL MODULES
 
   config$data[[module]][[parameter]] <- paste(value, collapse = " ")
 }
