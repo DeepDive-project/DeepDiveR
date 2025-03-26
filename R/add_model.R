@@ -52,7 +52,7 @@ add_model <- function(config = NULL, lstm_nodes = NULL, dense_nodes = NULL,
   lstm_nodes <- sort(lstm_nodes, decreasing=TRUE)
   lstm_nodes <- paste(lstm_nodes, collapse = " ")
   dense_nodes <- sort(dense_nodes, decreasing=TRUE)
-  dense_nodes <- paste(lstm_nodes, collapse = " ")
+  dense_nodes <- paste(dense_nodes, collapse = " ")
 
   lstm_parameter_name <- paste0("lstm_model_", model_name)
 
