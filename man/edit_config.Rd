@@ -23,10 +23,11 @@ changed. Once finalised, configuration files should be saved using
 }
 \description{
 A function to modify parameters within a configuration object for DeepDive,
-created using \code{create_config()}. Default values are listed below, while
-the values currently held by each parameter can be checked using the
-notation \verb{config$data$[module]$[parameter]}. Extensive checks ensure that
-it is possible for the specific parameter to hold the desired value.
+created using \code{create_config()}. Default values are listed in the
+Parameters table, which can be view using \code{View(parameters)}, while the
+values currently held by each parameter can be checked using the notation
+\verb{config$data$[module]$[parameter]}. Extensive checks ensure that it is
+possible for the specific parameter to hold the desired value.
 }
 \details{
 A full list of parameters, and details about the values they can
@@ -45,7 +46,6 @@ config <- create_config(name = "carnivora",
                         bins = bins,
                         n_regions = length(unique(carnivora$Region)))
 # Edit configuration object
-edit_config(config = config, module = "general",
-            parameter = "present_diversity", value = 313)
+edit_config(config = config, parameter = "present_diversity", value = 313)
 
 }

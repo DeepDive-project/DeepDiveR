@@ -1,10 +1,11 @@
 #' Edit values in the configuration file
 #'
 #' A function to modify parameters within a configuration object for DeepDive,
-#'   created using `create_config()`. Default values are listed below, while
-#'   the values currently held by each parameter can be checked using the
-#'   notation `config$data$[module]$[parameter]`. Extensive checks ensure that
-#'   it is possible for the specific parameter to hold the desired value.
+#'   created using `create_config()`. Default values are listed in the
+#'   Parameters table, which can be view using `View(parameters)`, while the
+#'   values currently held by each parameter can be checked using the notation
+#'   `config$data$[module]$[parameter]`. Extensive checks ensure that it is
+#'   possible for the specific parameter to hold the desired value.
 #'
 #' @param config \code{character}. The name of the configuration object, created
 #'   using `create_config()`, that will be edited.
@@ -35,8 +36,7 @@
 #'                         bins = bins,
 #'                         n_regions = length(unique(carnivora$Region)))
 #' # Edit configuration object
-#' edit_config(config = config, module = "general",
-#'             parameter = "present_diversity", value = 313)
+#' edit_config(config = config, parameter = "present_diversity", value = 313)
 #'
 #' @export
 edit_config <- function(config = NULL, parameter = NULL, value = NULL){
@@ -141,7 +141,18 @@ edit_config <- function(config = NULL, parameter = NULL, value = NULL){
     }
   }
 
-  # ADD CODE FOR PARAMETERS IN SEVERAL MODULES
+  # Obtain module(s) containing parameters
+  module <- parameters$module[which(parameters$parameter == parameter)]
 
-  config$data[[module]][[parameter]] <- paste(value, collapse = " ")
+  # If only present in one module, update there
+  if (length(module) == 1) {
+    config$data[[module]][[parameter]] <- paste(value)
+  }
+
+  # If present in multiple modules, update all
+  if (length(module) > 1) {
+    for (i in length(module)) {
+      config$data[[module[i]]][[parameter]] <- paste(value)
+    }
+  }
 }

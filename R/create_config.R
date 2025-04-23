@@ -2,8 +2,8 @@
 #'
 #' A function to generate a configuration object containing settings needed to
 #' launch DeepDive analyses in Python. Uses formatting compatible with the
-#' configparser library in Python via the R package ConfigParser (Hoefling, 2017).
-#' The first four arguments describe the data inputs and outputs, while
+#' configparser library in Python via the R package ConfigParser (Hoefling,
+#' 2017). The first four arguments describe the data inputs and outputs, while
 #' the last five turn on or off major elements of the analytical pipeline.
 #' The general module is always mandatory.
 #'
