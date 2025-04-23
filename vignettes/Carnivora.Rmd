@@ -111,7 +111,6 @@ We can now edit these parameter values if we wish to, using the function `edit_c
 ``` {r modify_config}
 # Modify the number of extant species ("present_diversity") in simulations
 edit_config(config = config,
-            module = "general",
             parameter = "present_diversity", 
             value = 313)
 ```
@@ -140,13 +139,11 @@ Now we need to describe the technical aspects of the neural network training and
 ```{r describe_setup}
 # Set number of training simulations to 100
 edit_config(config = config,
-            module = "simulations",
             parameter = "n_training_simulations", 
             value = 100)
 
 # Set number of test simulations to 10
 edit_config(config = config,
-            module = "simulations",
             parameter = "n_test_simulations", 
             value = 10)
 ```
